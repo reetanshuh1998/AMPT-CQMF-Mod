@@ -36,7 +36,7 @@ for i in "${!names[@]}"; do
     mkdir "run_${name}" && cp ampt input.ampt model_data.csv "run_${name}/"
     
     # Set the requested number of events dynamically
-    sed -i "s/^[0-9]\+ \+! NEVNT/${NUM_EVENTS}    ! NEVNT/" "run_${name}/input.ampt"
+    sed -i "s/^[0-9]*[ \t]*! NEVNT.*$/${NUM_EVENTS}    ! NEVNT (total number of events)/" "run_${name}/input.ampt"
     
     # Write input.density
     echo "$rho" > "run_${name}/input.density"

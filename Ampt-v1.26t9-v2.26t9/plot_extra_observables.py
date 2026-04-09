@@ -143,6 +143,8 @@ for name in files.keys():
             slopes.append(res.slope)
         else:
             slopes.append(np.nan)
+    else:
+        slopes.append(np.nan)
 
 ax.plot(densities, slopes, marker='D', markersize=10, color='purple', linestyle='--', linewidth=2)
 ax.set_xticks(densities)
