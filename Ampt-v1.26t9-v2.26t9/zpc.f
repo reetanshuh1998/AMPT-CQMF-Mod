@@ -2186,6 +2186,7 @@ cc      SAVE /rndm3/
      &       px(MAXPTN), py(MAXPTN), pz(MAXPTN), e(MAXPTN),
      &       xmass(MAXPTN), ityp(MAXPTN)
         common /qmcpar/ xmu_q, xmd_q, xms_q, iqmc
+        common /qmcvpot/ qv_u, qv_d, qv_s
         SAVE   
 
         iseed=iseedp
@@ -2193,26 +2194,48 @@ cc      SAVE /rndm3/
         
 c       --- CUSTOM CQMF MODIFICATION: Flavor-dependent mass ---
         if (iqmc .eq. 1) then
-           ! Get absolute flavor ID (AMPT/PYTHIA codes: 1=d, 2=u, 3=s)
-           ityp1 = abs(ityp(iscat))
-           ityp2 = abs(ityp(jscat))
-           
-           ! Mass for particle 1
-           if (ityp1 .eq. 3) then
-              xm1 = xms_q
-           elseif (ityp1 .eq. 1) then
-              xm1 = xmd_q
+           ! Particle 1 Setup
+           ityp1 = ityp(iscat)
+           if (ityp1 .eq. 21 .or. ityp1 .eq. 9) then
+              xm1 = 0.0d0
            else
-              xm1 = xmu_q
+              if (abs(ityp1) .eq. 3) then
+                 xm1 = xms_q
+                 v1  = qv_s
+              elseif (abs(ityp1) .eq. 1) then
+                 xm1 = xmd_q
+                 v1  = qv_d
+              else
+                 xm1 = xmu_q
+                 v1  = qv_u
+              endif
+              if (ityp1 .gt. 0) then
+                 xm1 = xm1 + v1
+              else
+                 xm1 = xm1 - v1
+              endif
            endif
            
-           ! Mass for particle 2
-           if (ityp2 .eq. 3) then
-              xm2p = xms_q
-           elseif (ityp2 .eq. 1) then
-              xm2p = xmd_q
+           ! Particle 2 Setup
+           ityp2 = ityp(jscat)
+           if (ityp2 .eq. 21 .or. ityp2 .eq. 9) then
+              xm2p = 0.0d0
            else
-              xm2p = xmu_q
+              if (abs(ityp2) .eq. 3) then
+                 xm2p = xms_q
+                 v2  = qv_s
+              elseif (abs(ityp2) .eq. 1) then
+                 xm2p = xmd_q
+                 v2  = qv_d
+              else
+                 xm2p = xmu_q
+                 v2  = qv_u
+              endif
+              if (ityp2 .gt. 0) then
+                 xm2p = xm2p + v2
+              else
+                 xm2p = xm2p - v2
+              endif
            endif
            
            ! Average mass squared for the scattering Kernel
@@ -6744,11 +6767,13 @@ c      if(number.le.100000) write(99,*) 'number, ran1=', number,ran1
       subroutine read_mass_csv
       implicit double precision (a-h, o-z)
       common /qmcpar/ xmu_q, xmd_q, xms_q, iqmc
+      common /qmcvpot/ qv_u, qv_d, qv_s
       common /para2/ xmp, xmu, alpha, rscut2, cutof2
-      character*100 line
+      character*200 line
       double precision den_arr(200), mu_arr(200), md_arr(200)
       double precision ms_arr(200), target_rho, curd, curmu, curmd
-      double precision curms, curmb, frac
+      double precision vu_arr(200), vd_arr(200), vs_arr(200)
+      double precision curvu, curvd, curvs, curms, curmb, frac
       integer i, npts
       SAVE
 
@@ -6763,12 +6788,16 @@ c      if(number.le.100000) write(99,*) 'number, ran1=', number,ran1
          
          npts = 0
  100     continue
-         read(89, *, end=200) curd, curmu, curmd, curms, curmb
+         read(89, *, end=200) curd, curmu, curmd, curms, curmb,
+     &                        curvu, curvd, curvs
          npts = npts + 1
          den_arr(npts) = curd
-         mu_arr(npts) = curmu
-         md_arr(npts) = curmd
-         ms_arr(npts) = curms
+         mu_arr(npts)  = curmu
+         md_arr(npts)  = curmd
+         ms_arr(npts)  = curms
+         vu_arr(npts)  = curvu
+         vd_arr(npts)  = curvd
+         vs_arr(npts)  = curvs
          goto 100
  200     continue
          close(89)
@@ -6778,6 +6807,9 @@ c      if(number.le.100000) write(99,*) 'number, ran1=', number,ran1
          xmu_q = mu_arr(1)
          xmd_q = md_arr(1)
          xms_q = ms_arr(1)
+         qv_u  = vu_arr(1)
+         qv_d  = vd_arr(1)
+         qv_s  = vs_arr(1)
          
          do 300 i = 1, npts-1
             if (target_rho .ge. den_arr(i) .and. 
@@ -6787,18 +6819,24 @@ c      if(number.le.100000) write(99,*) 'number, ran1=', number,ran1
                xmu_q = mu_arr(i) + frac * (mu_arr(i+1) - mu_arr(i))
                xmd_q = md_arr(i) + frac * (md_arr(i+1) - md_arr(i))
                xms_q = ms_arr(i) + frac * (ms_arr(i+1) - ms_arr(i))
+               qv_u  = vu_arr(i) + frac * (vu_arr(i+1) - vu_arr(i))
+               qv_d  = vd_arr(i) + frac * (vd_arr(i+1) - vd_arr(i))
+               qv_s  = vs_arr(i) + frac * (vs_arr(i+1) - vs_arr(i))
             endif
  300     continue
          
          xmu_q = xmu_q / 1000.d0
          xmd_q = xmd_q / 1000.d0
          xms_q = xms_q / 1000.d0
+         qv_u  = qv_u  / 1000.d0
+         qv_d  = qv_d  / 1000.d0
+         qv_s  = qv_s  / 1000.d0
          
-         write(6,*) '=== CQMF Custom Masses Loaded ==='
+         write(6,*) '=== CQMF Custom Masses & Potentials Loaded ==='
          write(6,*) 'Target density ratio: ', target_rho
-         write(6,*) 'm_u (GeV): ', xmu_q
-         write(6,*) 'm_d (GeV): ', xmd_q
-         write(6,*) 'm_s (GeV): ', xms_q
+         write(6,*) 'm_u (GeV): ', xmu_q, ' V_u (GeV): ', qv_u
+         write(6,*) 'm_d (GeV): ', xmd_q, ' V_d (GeV): ', qv_d
+         write(6,*) 'm_s (GeV): ', xms_q, ' V_s (GeV): ', qv_s
       endif
       
       return

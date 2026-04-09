@@ -17,9 +17,14 @@ def extract_pt_data(filename, target_pids):
                 try:
                     pid = int(parts[0])
                     if pid in target_pids:
-                        px, py = float(parts[1]), float(parts[2])
+                        px, py, pz, m = float(parts[1]), float(parts[2]), float(parts[3]), float(parts[4])
                         pt = np.sqrt(px**2 + py**2)
-                        pt_list.append(pt)
+                        p_mag = np.sqrt(pt**2 + pz**2)
+                        e = np.sqrt(p_mag**2 + m**2)
+                        if pt > 0 and e > abs(pz):
+                            y = 0.5 * np.log((e + pz) / (e - pz))
+                            if abs(y) < 0.5:
+                                pt_list.append(pt)
                 except ValueError: pass
                 finally: particles_left -= 1
     return np.array(pt_list)
@@ -45,22 +50,24 @@ bins = np.linspace(0, 3.0, 30)
 bin_centers = 0.5*(bins[1:] + bins[:-1])
 
 for i, name in enumerate(files.keys()):
-    h_k, _ = np.histogram(all_pt_k[name], bins=bins, density=True)
-    ax1.plot(bin_centers, h_k, color=colors[i], label=name, marker='o', markersize=4)
+    h_k, _ = np.histogram(all_pt_k[name], bins=bins)
+    inv_yield_k = h_k / (bin_centers * (bins[1]-bins[0]) * 200.0 * 1.0 * 2.0 * np.pi)
+    ax1.plot(bin_centers, inv_yield_k, color=colors[i], label=name, marker='o', markersize=4)
     
-    h_pi, _ = np.histogram(all_pt_pi[name], bins=bins, density=True)
-    ax2.plot(bin_centers, h_pi, color=colors[i], label=name, marker='s', markersize=4)
+    h_pi, _ = np.histogram(all_pt_pi[name], bins=bins)
+    inv_yield_pi = h_pi / (bin_centers * (bins[1]-bins[0]) * 200.0 * 1.0 * 2.0 * np.pi)
+    ax2.plot(bin_centers, inv_yield_pi, color=colors[i], label=name, marker='s', markersize=4)
 
 ax1.set_yscale('log')
 ax1.set_xlabel('$p_T$ (GeV/c)')
-ax1.set_ylabel('$(1/N) dN/dp_T$')
-ax1.set_title('Normalized $p_T$ Spectra: Kaons ($K^\pm$)')
+ax1.set_ylabel('$(1/2\pi p_T) d^2N/dydp_T$')
+ax1.set_title('Invariant $p_T$ Spectra: Kaons ($K^\pm$)')
 ax1.legend()
 
 ax2.set_yscale('log')
 ax2.set_xlabel('$p_T$ (GeV/c)')
-ax2.set_ylabel('$(1/N) dN/dp_T$')
-ax2.set_title('Normalized $p_T$ Spectra: Pions ($\pi^\pm$)')
+ax2.set_ylabel('$(1/2\pi p_T) d^2N/dydp_T$')
+ax2.set_title('Invariant $p_T$ Spectra: Pions ($\pi^\pm$)')
 ax2.legend()
 
 fig.suptitle('Transverse Momentum ($p_T$) Spectra vs Density', fontsize=14)

@@ -76,9 +76,20 @@ ax = axs[0, 0]
 pt_bins = np.linspace(0.2, 2.0, 8)
 for i, name in enumerate(files.keys()):
     if 321 in all_data[name] and -321 in all_data[name]:
-        _, v2_kp = calc_binned_mean(all_data[name][321]['pt'], all_data[name][321]['v2'], pt_bins)
-        _, v2_km = calc_binned_mean(all_data[name][-321]['pt'], all_data[name][-321]['v2'], pt_bins)
+        y_kp = all_data[name][321]['y']
+        pt_kp = all_data[name][321]['pt']
+        v2_kp_raw = all_data[name][321]['v2']
+        mask_kp = (y_kp > -0.5) & (y_kp < 0.5)
+        
+        y_km = all_data[name][-321]['y']
+        pt_km = all_data[name][-321]['pt']
+        v2_km_raw = all_data[name][-321]['v2']
+        mask_km = (y_km > -0.5) & (y_km < 0.5)
+        
+        _, v2_kp = calc_binned_mean(pt_kp[mask_kp], v2_kp_raw[mask_kp], pt_bins)
+        _, v2_km = calc_binned_mean(pt_km[mask_km], v2_km_raw[mask_km], pt_bins)
         delta_v2 = v2_kp - v2_km
+        
         ax.plot(pt_bins[:-1]+0.1, delta_v2, marker='o', color=colors[i], label=name)
 
 ax.axhline(0, color='gray', linestyle='--')
@@ -134,10 +145,13 @@ for i, name in enumerate(files.keys()):
     if 321 in all_data[name]:
         m0 = all_data[name][321]['m']
         mt_m0 = all_data[name][321]['mt'] - m0
-        hist, edges = np.histogram(mt_m0, bins=mt_bins)
-        bin_cen = edges[:-1] + (edges[1]-edges[0])/2
+        y_data = all_data[name][321]['y']
+        mask = (y_data > -0.5) & (y_data < 0.5)
+        
+        hist, edges = np.histogram(mt_m0[mask], bins=mt_bins)
+        bin_cen = 0.5 * (edges[:-1] + edges[1:])
         with np.errstate(divide='ignore', invalid='ignore'):
-            inv_yield = hist / (bin_cen * (edges[1]-edges[0]) * 200.0 * 2.0 * np.pi)
+            inv_yield = hist / ((bin_cen + m0) * (edges[1]-edges[0]) * 200.0 * 1.0 * 2.0 * np.pi)
         ax.plot(bin_cen, inv_yield, marker='^', color=colors[i], label=name)
 
 ax.set_yscale('log')
