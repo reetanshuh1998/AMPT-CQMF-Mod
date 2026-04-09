@@ -75,7 +75,8 @@ for i, name in enumerate(files.keys()):
         ax1.errorbar(y_cen, v1, yerr=v1_err, fmt='o-', color=colors[i], label=name, capsize=3)
     
     if len(all_pi[name]['pt']) > 0:
-        pt_cen, v2, v2_err = calc_binned_flow(all_pi[name]['pt'], all_pi[name]['v2'], pt_bins)
+        mask = (all_pi[name]['y'] > -0.5) & (all_pi[name]['y'] < 0.5)
+        pt_cen, v2, v2_err = calc_binned_flow(all_pi[name]['pt'][mask], all_pi[name]['v2'][mask], pt_bins)
         ax2.errorbar(pt_cen, v2, yerr=v2_err, fmt='o-', color=colors[i], label=name, capsize=3)
 
 ax1.axhline(0, color='gray', linestyle='--', linewidth=1)

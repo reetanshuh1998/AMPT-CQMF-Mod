@@ -7,14 +7,17 @@ warnings.filterwarnings("ignore")
 
 def extract_obs_data(filename):
     data = {}
-    if not os.path.exists(filename): return data
+    num_events = 0
+    if not os.path.exists(filename): return data, num_events
     with open(filename, 'r') as f:
         particles_left = 0
         for line in f:
             parts = line.strip().split()
             if not parts: continue
             if particles_left == 0:
-                try: particles_left = int(parts[2])
+                try: 
+                    particles_left = int(parts[2])
+                    num_events += 1
                 except (ValueError, IndexError): pass
             else:
                 try:
@@ -45,7 +48,7 @@ def extract_obs_data(filename):
     for pid in data:
         for k in ['pt', 'y', 'v1', 'v2', 'mt']:
             data[pid][k] = np.array(data[pid][k])
-    return data
+    return data, num_events
 
 def calc_binned_mean(x_data, v_data, bins):
     v_mean = []
@@ -65,9 +68,12 @@ files = {
 colors = ['royalblue', 'darkorange', 'forestgreen', 'firebrick']
 
 all_data = {}
+all_events = {}
 for name, fpath in files.items():
     print(f"Loading {name}...")
-    all_data[name] = extract_obs_data(fpath)
+    d, n_ev = extract_obs_data(fpath)
+    all_data[name] = d
+    all_events[name] = max(n_ev, 1)
 
 fig, axs = plt.subplots(2, 2, figsize=(15, 12))
 
@@ -106,8 +112,9 @@ for i, name in enumerate(files.keys()):
         y_data = all_data[name][2212]['y']
         hist, edges = np.histogram(y_data, bins=y_bins)
         bin_widths = edges[1:] - edges[:-1]
-        # normalize by number of events (200) and bin width
-        dndy = hist / (200.0 * bin_widths)
+        
+        n_ev = all_events[name]
+        dndy = hist / (n_ev * bin_widths)
         ax.plot(edges[:-1]+(bin_widths/2), dndy, marker='s', color=colors[i], label=name)
 
 ax.set_xlabel('Rapidity ($y$)')
@@ -123,10 +130,15 @@ for name in files.keys():
     if 2212 in all_data[name]:
         y_data = all_data[name][2212]['y']
         v1_data = all_data[name][2212]['v1']
-        # mid-rapidity mask
-        mask = (y_data > -0.8) & (y_data < 0.8)
-        if np.sum(mask) > 10:
-            res = linregress(y_data[mask], v1_data[mask])
+        
+        # Binned profile fit over mid-rapidity
+        y_profile_bins = np.linspace(-0.8, 0.8, 8)
+        y_cen, v1_mean = calc_binned_mean(y_data, v1_data, y_profile_bins)
+        
+        # remove NaNs
+        valid = ~np.isnan(v1_mean)
+        if np.sum(valid) >= 3:
+            res = linregress(y_cen[valid], v1_mean[valid])
             slopes.append(res.slope)
         else:
             slopes.append(np.nan)
@@ -150,8 +162,9 @@ for i, name in enumerate(files.keys()):
         
         hist, edges = np.histogram(mt_m0[mask], bins=mt_bins)
         bin_cen = 0.5 * (edges[:-1] + edges[1:])
+        n_ev = all_events[name]
         with np.errstate(divide='ignore', invalid='ignore'):
-            inv_yield = hist / ((bin_cen + m0) * (edges[1]-edges[0]) * 200.0 * 1.0 * 2.0 * np.pi)
+            inv_yield = hist / ((bin_cen + m0) * (edges[1]-edges[0]) * n_ev * 1.0 * 2.0 * np.pi)
         ax.plot(bin_cen, inv_yield, marker='^', color=colors[i], label=name)
 
 ax.set_yscale('log')
