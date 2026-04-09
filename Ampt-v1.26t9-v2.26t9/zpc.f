@@ -2201,18 +2201,18 @@ c       --- CUSTOM CQMF MODIFICATION: Flavor-dependent mass ---
            else
               if (abs(ityp1) .eq. 3) then
                  xm1 = xms_q
-                 v1  = qv_s
+                 vpot1 = qv_s
               elseif (abs(ityp1) .eq. 1) then
                  xm1 = xmd_q
-                 v1  = qv_d
+                 vpot1 = qv_d
               else
                  xm1 = xmu_q
-                 v1  = qv_u
+                 vpot1 = qv_u
               endif
               if (ityp1 .gt. 0) then
-                 xm1 = xm1 + v1
+                 xm1 = xm1 + vpot1
               else
-                 xm1 = xm1 - v1
+                 xm1 = xm1 - vpot1
               endif
            endif
            
@@ -2223,18 +2223,18 @@ c       --- CUSTOM CQMF MODIFICATION: Flavor-dependent mass ---
            else
               if (abs(ityp2) .eq. 3) then
                  xm2p = xms_q
-                 v2  = qv_s
+                 vpot2 = qv_s
               elseif (abs(ityp2) .eq. 1) then
                  xm2p = xmd_q
-                 v2  = qv_d
+                 vpot2 = qv_d
               else
                  xm2p = xmu_q
-                 v2  = qv_u
+                 vpot2 = qv_u
               endif
               if (ityp2 .gt. 0) then
-                 xm2p = xm2p + v2
+                 xm2p = xm2p + vpot2
               else
-                 xm2p = xm2p - v2
+                 xm2p = xm2p - vpot2
               endif
            endif
            
@@ -6776,6 +6776,11 @@ c      if(number.le.100000) write(99,*) 'number, ran1=', number,ran1
       double precision curvu, curvd, curvs, curms, curmb, frac
       integer i, npts
       SAVE
+
+c     --- Zero-initialize vector potentials (safe fallback for iqmc=0) ---
+      qv_u = 0.0d0
+      qv_d = 0.0d0
+      qv_s = 0.0d0
 
       open(88, file='input.density', status='old', err=900)
       read(88,*) target_rho

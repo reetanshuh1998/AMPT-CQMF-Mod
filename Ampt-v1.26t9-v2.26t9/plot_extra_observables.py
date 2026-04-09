@@ -96,7 +96,8 @@ for i, name in enumerate(files.keys()):
         _, v2_km = calc_binned_mean(pt_km[mask_km], v2_km_raw[mask_km], pt_bins)
         delta_v2 = v2_kp - v2_km
         
-        ax.plot(pt_bins[:-1]+0.1, delta_v2, marker='o', color=colors[i], label=name)
+        pt_cen = 0.5 * (pt_bins[1:] + pt_bins[:-1])
+        ax.plot(pt_cen, delta_v2, marker='o', color=colors[i], label=name)
 
 ax.axhline(0, color='gray', linestyle='--')
 ax.set_xlabel('$p_T$ (GeV/c)')

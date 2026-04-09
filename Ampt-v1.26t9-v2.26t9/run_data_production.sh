@@ -4,6 +4,12 @@ set -e
 # Make sure executable is built
 make
 
+# Verify binary was built
+if [ ! -f "ampt" ]; then
+    echo "ERROR: ampt binary not found after make. Aborting."
+    exit 1
+fi
+
 # Array of configurations
 names=("default" "modified" "density2" "density3")
 rhos=("0.0" "1.0" "2.0" "3.0")
@@ -24,7 +30,7 @@ for i in "${!names[@]}"; do
     echo "Starting configuration: $name (rho: $rho, iqmc: $iqmc)"
     
     # Create isolated directory
-    mkdir "run_${name}" && cp ampt input.ampt model_data.csv "run_${name}/" 2>/dev/null || true
+    mkdir "run_${name}" && cp ampt input.ampt model_data.csv "run_${name}/"
     
     # Write input.density
     echo "$rho" > "run_${name}/input.density"
@@ -57,5 +63,7 @@ python3 plot_pt_spectra.py
 python3 plot_ratios.py
 python3 plot_v1_v2.py
 python3 plot_extra_observables.py
+python3 plot_advanced_baryon_stopping.py
+python3 plot_advanced_splittings.py
 
 echo "Data production and plotting complete!"

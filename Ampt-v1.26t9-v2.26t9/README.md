@@ -14,7 +14,7 @@ By mapping the CQMF effective constituent masses to the partons during their pQC
 - Isospin asymmetric regimes ($u$ vs $d$)
 
 ## Theoretical Motivation & Citations
-At finite baryonic densities, the interactions of constituent quarks with background scalar ($\sigma, \zeta, \delta$) and vector ($\omega, \rho$) meson fields shift their fundamental masses. For example, antiprotons are heavily suppressed (pushed out) by vector repulsion, while strange quarks ($s$) decouple distinctly from light quarks, changing strangeness production ratios.
+At finite baryonic densities, the interactions of constituent quarks with background scalar ($\sigma, \zeta, \delta$) and vector ($\omega, \rho, \phi$) meson fields shift their fundamental masses. For example, antiprotons are heavily suppressed (pushed out) by vector repulsion, while strange quarks ($s$) couple to the $\phi$-meson field, producing distinct strangeness production ratios and $K^+/K^-$ splitting.
 
 1. **CQMF Baseline:** D. Singh, S. Kaur, A. Kumar, and H. Dahiya, "Effect of asymmetric nuclear medium on the valence quark structure of the kaons," *Phys. Rev. D* **111**, 054001 (2025).
 2. **Mean-Field Flow:** T. Song, et al., "Partonic mean-field effects on matter and antimatter elliptic flows," *arXiv:1211.5511*.
@@ -25,13 +25,13 @@ At finite baryonic densities, the interactions of constituent quarks with backgr
 All custom modifications in the source code can be searched via the `c --- CUSTOM CQMF MODIFICATION ---` marker.
 
 ### 1. The Parton Cascade (`zpc.f`)
-- **`subroutine read_mass_csv()`**: A new data-ingestion routine appended to the end of `zpc.f`. It reads the desired target density from `input.density`, opens `model_data.csv`, and linearly interpolates the exact $m_u, m_d$, and $m_s$ values at that density. These values are stored globally via `common /qmcpar/ xmu_q, xmd_q, xms_q`.
+- **`subroutine read_mass_csv()`**: A new data-ingestion routine appended to the end of `zpc.f`. It reads the desired target density from `input.density`, opens `model_data.csv`, and linearly interpolates the scalar masses ($m_u, m_d, m_s$) and vector potentials ($V_u, V_d, V_s$) at that density. These are stored globally via `common /qmcpar/` and `common /qmcvpot/`. Vector potentials are safely zero-initialized for the `iqmc=0` fallback path.
 - **`subroutine inizpc()`**: We injected a call to `read_mass_csv()` at the very beginning of the partonic phase initialization.
-- **`subroutine getht()`**: The main scattering kernel. It previously assumed an average global mass `xmp`. We modified the logic to dynamically check the colliding parton flavors (`ityp(iscat)`) and load our custom CQMF masses for $u, d,$ or $s$ prior to calculating the scattering angle probability distribution.
+- **`subroutine getht()`**: The main scattering kernel. It previously assumed an average global mass `xmp`. We modified the logic to dynamically check the colliding parton flavors (`ityp(iscat)`) and load our custom CQMF masses for $u, d,$ or $s$, applying the sign-flipped vector potential ($+V_q$ for quarks, $-V_q$ for antiquarks) prior to calculating the scattering angle probability distribution. Local variables are named `vpot1`/`vpot2` to avoid clashing with the `/ilist3/` common block.
 
 ### 2. Configuration Interfaces
 - **`input.density`**: A required 2-line configuration file. Line 1: `Target Baryonic Density Ratio (rho/rho_0)`. Line 2: `Toggle (1=Mod ON, 0=Default)`.
-- **`model_data.csv`**: A comma-separated lookup table mapping `density -> m_u, m_d, m_s`.
+- **`model_data.csv`**: An 8-column CSV lookup table: `density, m_u, m_d, m_s, M_B, V_u, V_d, V_s`. The vector potentials are derived from the $\omega_0$, $\rho_0$, and $\phi_0$ meson mean fields using SU(3) coupling constants ($g_{\omega u} = g_v/2\sqrt{2}$, $g_{\phi s} = g_v/2$). Regenerated via `python3 build_v2_csv.py`.
 - **`input.ampt`**: Pre-configured to $\sqrt{s_{NN}} = 7.7$ GeV in String Melting mode (`ISOFT=4`), with widened lifecycle constants (`NTMAX=300`) to guarantee ZPC adequately handles the dense phase dynamics.
 
 ---
@@ -45,14 +45,24 @@ All custom modifications in the source code can be searched via the `c --- CUSTO
    ./exec
    ```
 4. Verify the output in `nohup.out`. You should see:
-   ```
-   === CQMF Custom Masses Loaded ===
-   Target density ratio: 1.0000
-   m_u (GeV): 0.1624
-   m_d (GeV): 0.1624
-   m_s (GeV): 0.4166
-   ```
+    ```
+    === CQMF Custom Masses & Potentials Loaded ===
+    Target density ratio:  1.0000
+    m_u (GeV):  0.1957  V_u (GeV):  0.0746
+    m_d (GeV):  0.1957  V_d (GeV):  0.0746
+    m_s (GeV):  0.4538  V_s (GeV): -0.0106
+    ```
 5. The final heavy-ion particle track records are emitted to `ana/ampt.dat`.
+
+---
+
+## Automation & Data Pipeline
+
+### `build_v2_csv.py`
+Reads the raw CQMF thermodynamic field solutions from `DataAnalysis/data_fields_18_oct/file_eta0_T0_fs3.txt` (which includes the $\phi$-meson field) and computes the proper vector potentials using the SU(3) coupling constants from `Parameteric.py`. Outputs `model_data.csv`.
+
+### `run_data_production.sh`
+Full orchestration script: compiles the binary, spawns 4 parallel AMPT jobs (Default, $\rho_0$, $2\rho_0$, $3\rho_0$), collects outputs into `ana/`, and runs all plotting scripts. Includes an explicit binary existence check to prevent silent failures.
 
 ---
 
@@ -79,6 +89,18 @@ A heavyweight script extracting four advanced observables required for high-tier
 3. **Mid-Rapidity Flow Slope ($dv_1/dy|_{y=0}$)**: Extracts the linear slope of Directed flow, a direct proxy for the compressibility of the Equation of State (EOS).
 4. **Transverse Mass Spectra**: Plots invariant yields against $(m_T - m_0)$ to visualize radial expansion velocity.
 
+### `plot_advanced_baryon_stopping.py`
+Plots three rapidity-dependent observables testing the vector potential directly:
+1. **Net-Proton $dN/dy$**: $(p - \bar{p})$ vs rapidity — baryon stopping profile.
+2. **$\bar{p}/p$ Ratio vs $y$**: Antimatter/matter asymmetry driven by vector repulsion.
+3. **$K^+/K^-$ Ratio vs $y$**: Strangeness source asymmetry from the $\phi$-field coupling.
+
+### `plot_advanced_splittings.py`
+Proton vs antiproton elliptic flow splitting ($\Delta v_2 = v_2(p) - v_2(\bar{p})$ vs $p_T$) — the definitive STAR BES signature of vector potentials.
+
+### `plot_proton_kaon_production.py`
+Comprehensive 2×6 panel: $p_T$ spectra (top) and rapidity distributions (bottom) for all 6 key species ($p, \bar{p}, K^+, K^-, \pi^+, \pi^-$) across all density configurations. Pions serve as the control group.
+
 ---
 
 ## Final Phenomenological Results
@@ -103,3 +125,7 @@ Density-dependent responses in Directed Flow $v_1$ (capturing phase softening lo
 
 ### 5. Flow ($v_1$ vs $v_2$) Kinematics
 ![Direct and Elliptic Flow Constraints](flow_v1_v2_density_scan.png)
+
+### 6. Species-Resolved Production
+$p_T$ spectra and rapidity distributions for all six key hadron species, demonstrating selective medium effects on baryons and kaons while pions remain stable.
+![Particle Production](proton_kaon_production.png)

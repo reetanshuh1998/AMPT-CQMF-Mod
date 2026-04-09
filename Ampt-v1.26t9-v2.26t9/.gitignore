@@ -7,3 +7,8 @@ ampt.dat
 ana/*.dat
 ana/*.log
 DataAnalysis/
+
+run_default/
+run_modified/
+run_density2/
+run_density3/
