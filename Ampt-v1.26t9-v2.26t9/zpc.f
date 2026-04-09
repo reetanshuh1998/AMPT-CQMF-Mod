@@ -2211,7 +2211,7 @@ c       receive the same scalar mass here.
            ityp2 = ityp(jscat)
 
            ! Scalar mass for particle 1
-           if (abs(ityp1) .eq. 21) then
+           if (ityp1 .eq. 21) then
               xm1 = 0.0d0
            elseif (abs(ityp1) .eq. 3) then
               xm1 = xms_q
@@ -2222,7 +2222,7 @@ c       receive the same scalar mass here.
            endif
 
            ! Scalar mass for particle 2
-           if (abs(ityp2) .eq. 21) then
+           if (ityp2 .eq. 21) then
               xm2p = 0.0d0
            elseif (abs(ityp2) .eq. 3) then
               xm2p = xms_q
@@ -6780,13 +6780,14 @@ c      if(number.le.100000) write(99,*) 'number, ran1=', number,ran1
          
          npts = 0
  100     continue
-         read(89, *, end=200) curd, curmu, curmd, curms, curmb
-c        Guard against fixed-size array overflow (limit = 200 rows)
+c        Guard against fixed-size array overflow (limit = 200 rows): stop
+c        reading before attempting to write beyond array bounds
          if (npts .ge. 200) then
             write(6,*) 'WARNING: model_data.csv exceeds 200-row limit.'
             write(6,*) '         Truncating to first 200 entries.'
             goto 200
          endif
+         read(89, *, end=200) curd, curmu, curmd, curms, curmb
          npts = npts + 1
          den_arr(npts) = curd
          mu_arr(npts) = curmu

@@ -26,9 +26,7 @@ def extract_flow_data(filename, target_pids, y_cut=None):
                         e = np.sqrt(p_mag**2 + m**2)
                         if pt > 0 and e > abs(pz):
                             y = 0.5 * np.log((e + pz) / (e - pz))
-                            if y_cut is not None and abs(y) >= y_cut:
-                                pass  # outside acceptance
-                            else:
+                            if y_cut is None or abs(y) < y_cut:
                                 v1 = px / pt
                                 v2 = (px**2 - py**2) / (pt**2)
                                 data['pt'].append(pt)

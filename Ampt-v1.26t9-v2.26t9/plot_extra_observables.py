@@ -63,6 +63,8 @@ files = {
     'Mod (3$\u03c1_0$)': "ana/ampt_density3.dat"
 }
 colors = ['royalblue', 'darkorange', 'forestgreen', 'firebrick']
+# Number of simulated events — update if re-running with a different NEVNT
+N_EVENTS = 200
 
 all_data = {}
 for name, fpath in files.items():
@@ -102,7 +104,7 @@ for i, name in enumerate(files.keys()):
         hist, edges = np.histogram(y_data, bins=y_bins)
         bin_widths = edges[1:] - edges[:-1]
         # normalize by number of events (200) and bin width
-        dndy = hist / (200.0 * bin_widths)
+        dndy = hist / (N_EVENTS * bin_widths)
         ax.plot(edges[:-1]+(bin_widths/2), dndy, marker='s', color=colors[i], label=name)
 
 ax.set_xlabel('Rapidity ($y$)')
@@ -153,7 +155,7 @@ for i, name in enumerate(files.keys()):
         # Correct invariant yield: (1/2pi mT) d^2N/dy dmT
         # mT = (mT - m0) + m0 = bin_cen + m0
         with np.errstate(divide='ignore', invalid='ignore'):
-            inv_yield = hist / ((bin_cen + m0) * (edges[1]-edges[0]) * 200.0 * 2.0 * np.pi)
+            inv_yield = hist / ((bin_cen + m0) * (edges[1]-edges[0]) * N_EVENTS * 2.0 * np.pi)
         ax.plot(bin_cen, inv_yield, marker='^', color=colors[i], label=name)
 
 ax.set_yscale('log')
