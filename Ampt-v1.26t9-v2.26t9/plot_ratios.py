@@ -3,6 +3,9 @@ import matplotlib.pyplot as plt
 import os
 import sys
 
+# Mid-rapidity acceptance window
+Y_CUT = 0.5
+
 def parse_ampt_dat(filename):
     counts = {
         'pi+': 0, 'pi-': 0,
@@ -30,7 +33,16 @@ def parse_ampt_dat(filename):
             else:
                 try:
                     pid = int(parts[0])
-                    if pid in pids: counts[pids[pid]] += 1
+                    if pid in pids:
+                        px, py, pz, m = (float(parts[1]), float(parts[2]),
+                                         float(parts[3]), float(parts[4]))
+                        pt = np.sqrt(px**2 + py**2)
+                        p_mag = np.sqrt(pt**2 + pz**2)
+                        e = np.sqrt(p_mag**2 + m**2)
+                        if pt > 0 and e > abs(pz):
+                            y = 0.5 * np.log((e + pz) / (e - pz))
+                            if abs(y) < Y_CUT:
+                                counts[pids[pid]] += 1
                 except ValueError: pass
                 finally: particles_left -= 1
     return counts
@@ -84,7 +96,7 @@ for i, (name, counts) in enumerate(all_counts.items()):
                     ha='center', va='bottom', fontsize=8, rotation=90)
 
 ax.set_ylabel('Particle Ratio')
-ax.set_title('Particle Ratios in Au+Au @ $\sqrt{s_{NN}}$=7.7 GeV vs Density')
+ax.set_title(r'Particle Ratios in Au+Au @ $\sqrt{s_{NN}}$=7.7 GeV vs Density ($|y|<0.5$)')
 ax.set_xticks(x)
 ax.set_xticklabels(ratios)
 ax.legend()

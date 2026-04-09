@@ -4,7 +4,8 @@ import os
 import warnings
 warnings.filterwarnings("ignore")
 
-def extract_flow_data(filename, target_pids):
+def extract_flow_data(filename, target_pids, y_cut=None):
+    """Extract flow variables.  Apply |y| < y_cut if y_cut is given."""
     data = {'pt': [], 'y': [], 'v1': [], 'v2': []}
     if not os.path.exists(filename): return data
     with open(filename, 'r') as f:
@@ -25,12 +26,15 @@ def extract_flow_data(filename, target_pids):
                         e = np.sqrt(p_mag**2 + m**2)
                         if pt > 0 and e > abs(pz):
                             y = 0.5 * np.log((e + pz) / (e - pz))
-                            v1 = px / pt
-                            v2 = (px**2 - py**2) / (pt**2)
-                            data['pt'].append(pt)
-                            data['y'].append(y)
-                            data['v1'].append(v1)
-                            data['v2'].append(v2)
+                            if y_cut is not None and abs(y) >= y_cut:
+                                pass  # outside acceptance
+                            else:
+                                v1 = px / pt
+                                v2 = (px**2 - py**2) / (pt**2)
+                                data['pt'].append(pt)
+                                data['y'].append(y)
+                                data['v1'].append(v1)
+                                data['v2'].append(v2)
                 except ValueError: pass
                 finally: particles_left -= 1
     for k in data: data[k] = np.array(data[k])
@@ -61,8 +65,10 @@ all_p = {}
 all_pi = {}
 for name, fpath in files.items():
     print(f"Parsing {name} data...")
+    # Protons: full rapidity range for v1(y) plot
     all_p[name] = extract_flow_data(fpath, [2212])
-    all_pi[name] = extract_flow_data(fpath, [211, -211])
+    # Pions: restrict to |y| < 1.0 for mid-rapidity v2(pT) plot
+    all_pi[name] = extract_flow_data(fpath, [211, -211], y_cut=1.0)
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
 
@@ -87,7 +93,7 @@ ax1.legend()
 ax2.axhline(0, color='gray', linestyle='--', linewidth=1)
 ax2.set_xlabel('$p_T$ (GeV/c)')
 ax2.set_ylabel('Elliptic Flow $v_2$')
-ax2.set_title('$v_2$ vs $p_T$ (Pions)')
+ax2.set_title(r'$v_2$ vs $p_T$ (Pions, $|y|<1.0$)')
 ax2.legend()
 
 fig.suptitle('Directed Flow ($v_1$) and Elliptic Flow ($v_2$) vs Density', fontsize=15)

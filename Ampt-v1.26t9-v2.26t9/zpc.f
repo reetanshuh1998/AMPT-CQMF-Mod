@@ -2192,30 +2192,47 @@ cc      SAVE /rndm3/
         xmu2 = (hbarc * xmu) ** 2
         
 c       --- CUSTOM CQMF MODIFICATION: Flavor-dependent mass ---
+c       NOTE: Only the scalar (chiral) mass shift from the CQMF model is
+c       applied here.  Vector potential contributions (V_omega, V_rho) that
+c       would split matter from antimatter are NOT yet included; they require
+c       additional columns in model_data.csv and will be added once those
+c       values are supplied.
+c       As an intentional approximation the parton on-shell masses (xmass
+c       array) are kept at zero (massless propagation).  Only the t-hat
+c       sampling distribution in the scattering kernel reflects the CQMF
+c       scalar mass.  Quarks and antiquarks of the same flavour therefore
+c       receive the same scalar mass here.
         if (iqmc .eq. 1) then
-           ! Get absolute flavor ID (AMPT/PYTHIA codes: 1=d, 2=u, 3=s)
-           ityp1 = abs(ityp(iscat))
-           ityp2 = abs(ityp(jscat))
-           
-           ! Mass for particle 1
-           if (ityp1 .eq. 3) then
+           ! Use the signed type code (AMPT/PYTHIA-like):
+           !   quarks   :  1=d,  2=u,  3=s
+           !   antiquarks: -1=dbar, -2=ubar, -3=sbar
+           !   gluons   : 21 (massless in pQCD, always xm=0)
+           ityp1 = ityp(iscat)
+           ityp2 = ityp(jscat)
+
+           ! Scalar mass for particle 1
+           if (abs(ityp1) .eq. 21) then
+              xm1 = 0.0d0
+           elseif (abs(ityp1) .eq. 3) then
               xm1 = xms_q
-           elseif (ityp1 .eq. 1) then
+           elseif (abs(ityp1) .eq. 1) then
               xm1 = xmd_q
            else
               xm1 = xmu_q
            endif
-           
-           ! Mass for particle 2
-           if (ityp2 .eq. 3) then
+
+           ! Scalar mass for particle 2
+           if (abs(ityp2) .eq. 21) then
+              xm2p = 0.0d0
+           elseif (abs(ityp2) .eq. 3) then
               xm2p = xms_q
-           elseif (ityp2 .eq. 1) then
+           elseif (abs(ityp2) .eq. 1) then
               xm2p = xmd_q
            else
               xm2p = xmu_q
            endif
-           
-           ! Average mass squared for the scattering Kernel
+
+           ! Average scalar mass squared for the scattering kernel
            xmp2 = ((xm1 + xm2p) / 2.0d0)**2
         else
            xmp2 = xmp ** 2
@@ -6764,6 +6781,12 @@ c      if(number.le.100000) write(99,*) 'number, ran1=', number,ran1
          npts = 0
  100     continue
          read(89, *, end=200) curd, curmu, curmd, curms, curmb
+c        Guard against fixed-size array overflow (limit = 200 rows)
+         if (npts .ge. 200) then
+            write(6,*) 'WARNING: model_data.csv exceeds 200-row limit.'
+            write(6,*) '         Truncating to first 200 entries.'
+            goto 200
+         endif
          npts = npts + 1
          den_arr(npts) = curd
          mu_arr(npts) = curmu
@@ -6772,24 +6795,36 @@ c      if(number.le.100000) write(99,*) 'number, ran1=', number,ran1
          goto 100
  200     continue
          close(89)
-         
+
          if (npts .eq. 0) goto 900
-         
+
+c        Default: use the lowest-density (vacuum) entry
          xmu_q = mu_arr(1)
          xmd_q = md_arr(1)
          xms_q = ms_arr(1)
-         
+
          do 300 i = 1, npts-1
-            if (target_rho .ge. den_arr(i) .and. 
+            if (target_rho .ge. den_arr(i) .and.
      &          target_rho .le. den_arr(i+1)) then
-               frac = (target_rho - den_arr(i)) / 
+               frac = (target_rho - den_arr(i)) /
      &                (den_arr(i+1) - den_arr(i))
                xmu_q = mu_arr(i) + frac * (mu_arr(i+1) - mu_arr(i))
                xmd_q = md_arr(i) + frac * (md_arr(i+1) - md_arr(i))
                xms_q = ms_arr(i) + frac * (ms_arr(i+1) - ms_arr(i))
             endif
  300     continue
-         
+
+c        Extrapolation guard: if target exceeds CSV maximum, use the
+c        highest-density entry rather than silently returning vacuum values
+         if (target_rho .gt. den_arr(npts)) then
+            write(6,*) 'WARNING: target density ratio ', target_rho,
+     &           ' exceeds CSV maximum ', den_arr(npts)
+            write(6,*) '         Using highest-density CSV entry.'
+            xmu_q = mu_arr(npts)
+            xmd_q = md_arr(npts)
+            xms_q = ms_arr(npts)
+         endif
+
          xmu_q = xmu_q / 1000.d0
          xmd_q = xmd_q / 1000.d0
          xms_q = xms_q / 1000.d0

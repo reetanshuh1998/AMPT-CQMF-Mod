@@ -68,17 +68,6 @@ def pseudorapidity(px, py, pz):
         return 0.0
     return 0.5 * np.log((p + pz)/(p - pz))
 
-
-
-import numpy as np
-
-# Example: assume 'p' is your momentum column
-p = np.array(data['p'])  # or however you read it
-
-# Remove invalid values
-p = p[np.isfinite(p)]
-p = p[p != -99.9956]  # remove placeholder used by AMPT
-
 # -----------------------------
 # Individual particle analysis
 # -----------------------------
@@ -106,7 +95,7 @@ for name, pdg_id in particle_dict.items():
     # -------------------------
     # pT histogram
     plt.figure(figsize=(6,4))
-    plt.hist(p,pt, bins=50, color='steelblue', alpha=0.8)
+    plt.hist(pt, bins=50, color='steelblue', alpha=0.8)
     plt.xlabel(r"$p_T$ [GeV/c]")
     plt.ylabel("Counts")
     plt.title(f"{name} pT distribution")

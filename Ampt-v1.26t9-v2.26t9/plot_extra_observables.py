@@ -71,19 +71,25 @@ for name, fpath in files.items():
 
 fig, axs = plt.subplots(2, 2, figsize=(15, 12))
 
-# 1. Delta v2 (K+ - K-) Splitting
+# 1. Delta v2 (K+ - K-) Splitting — restricted to mid-rapidity |y| < 0.5
 ax = axs[0, 0]
 pt_bins = np.linspace(0.2, 2.0, 8)
 for i, name in enumerate(files.keys()):
     if 321 in all_data[name] and -321 in all_data[name]:
-        _, v2_kp = calc_binned_mean(all_data[name][321]['pt'], all_data[name][321]['v2'], pt_bins)
-        _, v2_km = calc_binned_mean(all_data[name][-321]['pt'], all_data[name][-321]['v2'], pt_bins)
+        kp_mask = np.abs(all_data[name][321]['y']) < 0.5
+        km_mask = np.abs(all_data[name][-321]['y']) < 0.5
+        pt_cen, v2_kp = calc_binned_mean(
+            all_data[name][321]['pt'][kp_mask],
+            all_data[name][321]['v2'][kp_mask], pt_bins)
+        _, v2_km = calc_binned_mean(
+            all_data[name][-321]['pt'][km_mask],
+            all_data[name][-321]['v2'][km_mask], pt_bins)
         delta_v2 = v2_kp - v2_km
-        ax.plot(pt_bins[:-1]+0.1, delta_v2, marker='o', color=colors[i], label=name)
+        ax.plot(pt_cen, delta_v2, marker='o', color=colors[i], label=name)
 
 ax.axhline(0, color='gray', linestyle='--')
 ax.set_xlabel('$p_T$ (GeV/c)')
-ax.set_ylabel('$\Delta v_2 (K^+ - K^-)$')
+ax.set_ylabel(r'$\Delta v_2 (K^+ - K^-)$')
 ax.set_title('Elliptic Flow Splitting vs $p_T$')
 ax.legend()
 
@@ -104,19 +110,26 @@ ax.set_ylabel('$dN/dy$')
 ax.set_title('Proton Rapidity Distribution')
 ax.legend()
 
-# 3. v1 slope dv1/dy at mid-rapidity for Protons
+# 3. v1 slope dv1/dy at mid-rapidity for Protons — fitted on binned profile means
 ax = axs[1, 0]
-densities = [0, 1, 2, 3] # Default proxy is 0 
+densities = [0, 1, 2, 3] # Default proxy is 0
 slopes = []
+y_fit_bins = np.linspace(-0.8, 0.8, 9)
+y_fit_cen = 0.5 * (y_fit_bins[:-1] + y_fit_bins[1:])
 for name in files.keys():
     if 2212 in all_data[name]:
         y_data = all_data[name][2212]['y']
         v1_data = all_data[name][2212]['v1']
-        # mid-rapidity mask
         mask = (y_data > -0.8) & (y_data < 0.8)
         if np.sum(mask) > 10:
-            res = linregress(y_data[mask], v1_data[mask])
-            slopes.append(res.slope)
+            _, v1_mean = calc_binned_mean(y_data[mask], v1_data[mask],
+                                          y_fit_bins)
+            valid = np.isfinite(v1_mean)
+            if np.sum(valid) > 2:
+                res = linregress(y_fit_cen[valid], v1_mean[valid])
+                slopes.append(res.slope)
+            else:
+                slopes.append(np.nan)
         else:
             slopes.append(np.nan)
 
@@ -127,22 +140,25 @@ ax.set_ylabel('$dv_1/dy|_{y=0}$')
 ax.set_title('Directed Flow Slope at Mid-Rapidity (Protons)')
 ax.grid(True, alpha=0.3)
 
-# 4. Transverse Mass spectra (mT - m0) for Kaons
+# 4. Transverse Mass spectra (mT - m0) for Kaons — mid-rapidity |y| < 0.5
 ax = axs[1, 1]
 mt_bins = np.linspace(0.0, 2.0, 20)
 for i, name in enumerate(files.keys()):
     if 321 in all_data[name]:
         m0 = all_data[name][321]['m']
-        mt_m0 = all_data[name][321]['mt'] - m0
+        y_mask = np.abs(all_data[name][321]['y']) < 0.5
+        mt_m0 = all_data[name][321]['mt'][y_mask] - m0
         hist, edges = np.histogram(mt_m0, bins=mt_bins)
         bin_cen = edges[:-1] + (edges[1]-edges[0])/2
+        # Correct invariant yield: (1/2pi mT) d^2N/dy dmT
+        # mT = (mT - m0) + m0 = bin_cen + m0
         with np.errstate(divide='ignore', invalid='ignore'):
-            inv_yield = hist / (bin_cen * (edges[1]-edges[0]) * 200.0 * 2.0 * np.pi)
+            inv_yield = hist / ((bin_cen + m0) * (edges[1]-edges[0]) * 200.0 * 2.0 * np.pi)
         ax.plot(bin_cen, inv_yield, marker='^', color=colors[i], label=name)
 
 ax.set_yscale('log')
 ax.set_xlabel('$m_T - m_0$ (GeV/c$^2$)')
-ax.set_ylabel('$(1/2\pi m_T) d^2N/dydm_T$')
+ax.set_ylabel(r'$(1/2\pi m_T) d^2N/dydm_T$')
 ax.set_title('$m_T$ Spectra offset for $K^+$')
 ax.legend()
 
