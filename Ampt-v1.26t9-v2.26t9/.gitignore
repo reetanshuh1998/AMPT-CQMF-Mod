@@ -1,0 +1,8 @@
+*.o
+ampt
+nseed_runtime
+start.time
+nohup.out
+ampt.dat
+ana/*.dat
+ana/*.log

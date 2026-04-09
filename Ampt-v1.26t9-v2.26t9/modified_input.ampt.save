@@ -1,0 +1,52 @@
+200            ! EFRM (sqrt(S_NN) in GeV if FRAME is CMS)
+CMS             ! FRAME
+A               ! PROJ
+A               ! TARG
+197             ! IAP (projectile A number)
+79              ! IZP (projectile Z number)
+197             ! IAT (target A number)
+79              ! IZT (target Z number)
+100             ! NEVNT (total number of events)
+0.              ! BMIN (mininum impact parameter in fm) 
+3.              ! BMAX (maximum impact parameter in fm, also see below)
+4               ! ISOFT (D=4): String Melting (medium study)
+150             ! NTMAX: number of timesteps (D=150), will modify below
+0.2             ! DT: timestep in fm (hadron cascade time= DT*NTMAX)
+0.55            ! PARJ(41): Lund a (string fragmentation)
+0.15            ! PARJ(42): Lund b (string fragmentation)
+1               ! Popcorn mechanism flag
+1.0             ! PARJ(5) for baryon-antibaryon control
+1               ! shadowing flag
+1               ! quenching flag (D=1 → ON for medium effect)  <-- modified
+2.0             ! quenching parameter -dE/dx (GeV/fm)
+2.0             ! p0 cutoff in HIJING for minijet production
+1.8d0           ! parton screening mass (fm^-1)  <-- reduced for stronger parton interactions
+0               ! IZPC: 0 forward-angle, 100 isotropic
+0.47d0          ! alpha in parton cascade  <-- increased for stronger scattering
+1d6             ! dpcoal in GeV
+1d6             ! drcoal in fm
+0               ! ihjsed: HIJING seed
+13150909        ! HIJING random seed
+8               ! Parton cascade random seed
+0               ! flag for K0s weak decays
+1               ! flag for phi decays at end of cascade
+0               ! flag for pi0 decays at end of cascade
+0               ! optional OSCAR output
+0               ! flag for perturbative deuteron calculation
+1               ! integer factor for perturbative deuterons
+1               ! cross-section choice for deuteron
+-7.             ! Pt min for minijet
+1000            ! maxmiss
+3               ! flag on initial and final state radiation
+1               ! flag on Kt kick
+0               ! flag to turn on quark pair embedding
+7., 0.          ! initial Px, Py embedded quark
+0., 0.          ! initial x, y of embedded quark
+1, 5., 0.       ! nsembd, psembd, tmaxembd
+0               ! shadowing modification flag
+1.d0            ! factor to modify nuclear shadowing  <-- full shadowing
+0               ! flag for random orientation of reaction plane
+
+! --- Optional: increase hadronic cascade evolution
+NTMAX: 300      ! double the timesteps for stronger hadronic medium
+
