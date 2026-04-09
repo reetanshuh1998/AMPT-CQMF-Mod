@@ -4,14 +4,17 @@ import os
 
 def extract_pt_data(filename, target_pids):
     pt_list = []
-    if not os.path.exists(filename): return pt_list
+    num_events = 0
+    if not os.path.exists(filename): return pt_list, 0
     with open(filename, 'r') as f:
         particles_left = 0
         for line in f:
             parts = line.strip().split()
             if not parts: continue
             if particles_left == 0:
-                try: particles_left = int(parts[2])
+                try: 
+                    particles_left = int(parts[2])
+                    num_events += 1
                 except (ValueError, IndexError): pass
             else:
                 try:
@@ -27,7 +30,7 @@ def extract_pt_data(filename, target_pids):
                                 pt_list.append(pt)
                 except ValueError: pass
                 finally: particles_left -= 1
-    return np.array(pt_list)
+    return np.array(pt_list), max(1, num_events)
 
 files = {
     'Default': "ana/ampt_default.dat",
@@ -39,10 +42,14 @@ colors = ['royalblue', 'darkorange', 'forestgreen', 'firebrick']
 
 all_pt_k = {}
 all_pt_pi = {}
+nevents = {}
 for name, fpath in files.items():
     print(f"Parsing {name} data...")
-    all_pt_k[name] = extract_pt_data(fpath, [321, -321])
-    all_pt_pi[name] = extract_pt_data(fpath, [211, -211])
+    k_pts, n1 = extract_pt_data(fpath, [321, -321])
+    pi_pts, n2 = extract_pt_data(fpath, [211, -211])
+    all_pt_k[name] = k_pts
+    all_pt_pi[name] = pi_pts
+    nevents[name] = max(n1, n2)
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
 bins = np.linspace(0, 3.0, 30)
@@ -51,11 +58,11 @@ bin_centers = 0.5*(bins[1:] + bins[:-1])
 
 for i, name in enumerate(files.keys()):
     h_k, _ = np.histogram(all_pt_k[name], bins=bins)
-    inv_yield_k = h_k / (bin_centers * (bins[1]-bins[0]) * 200.0 * 1.0 * 2.0 * np.pi)
+    inv_yield_k = h_k / (bin_centers * (bins[1]-bins[0]) * nevents[name] * 1.0 * 2.0 * np.pi)
     ax1.plot(bin_centers, inv_yield_k, color=colors[i], label=name, marker='o', markersize=4)
     
     h_pi, _ = np.histogram(all_pt_pi[name], bins=bins)
-    inv_yield_pi = h_pi / (bin_centers * (bins[1]-bins[0]) * 200.0 * 1.0 * 2.0 * np.pi)
+    inv_yield_pi = h_pi / (bin_centers * (bins[1]-bins[0]) * nevents[name] * 1.0 * 2.0 * np.pi)
     ax2.plot(bin_centers, inv_yield_pi, color=colors[i], label=name, marker='s', markersize=4)
 
 ax1.set_yscale('log')

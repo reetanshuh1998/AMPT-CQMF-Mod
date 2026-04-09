@@ -10,6 +10,9 @@ if [ ! -f "ampt" ]; then
     exit 1
 fi
 
+# General Production Configuration
+NUM_EVENTS=20
+
 # Array of configurations
 names=("default" "modified" "density2" "density3")
 rhos=("0.0" "1.0" "2.0" "3.0")
@@ -31,6 +34,9 @@ for i in "${!names[@]}"; do
     
     # Create isolated directory
     mkdir "run_${name}" && cp ampt input.ampt model_data.csv "run_${name}/"
+    
+    # Set the requested number of events dynamically
+    sed -i "s/^[0-9]\+ \+! NEVNT/${NUM_EVENTS}    ! NEVNT/" "run_${name}/input.ampt"
     
     # Write input.density
     echo "$rho" > "run_${name}/input.density"
@@ -65,5 +71,6 @@ python3 plot_v1_v2.py
 python3 plot_extra_observables.py
 python3 plot_advanced_baryon_stopping.py
 python3 plot_advanced_splittings.py
+python3 plot_proton_kaon_production.py
 
 echo "Data production and plotting complete!"

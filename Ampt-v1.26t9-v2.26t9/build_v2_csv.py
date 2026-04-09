@@ -25,24 +25,27 @@ def build_data():
     gphid = 0.0                # d quark does NOT couple to phi
     # ---------------------------------------------------------
     
+    raw_data = []
     with open(in_file, 'r') as f:
-        lines = f.readlines()
-        
+        for line in f:
+            parts = [p for p in line.strip().split() if p]
+            if parts:
+                raw_data.append([float(x) for x in parts])
+
+    # Fix low-density numerical noise in fs3 data by interpolating 
+    # from density=0 to density=0.3333 (rows 0 to 5)
+    row0 = raw_data[0]
+    row5 = raw_data[5]
+    for i in range(1, 5):
+        frac = float(i) / 5.0
+        # Smooth all relevant columns: omega(25), rho(26), phi(27), mu(28), md(29), ms(30)
+        for col in [25, 26, 27, 28, 29, 30]:
+            raw_data[i][col] = (1.0 - frac) * row0[col] + frac * row5[col]
+            
     out_lines = []
     out_lines.append("density,m_u,m_d,m_s,M_B,V_u,V_d,V_s\n")
     
-    # fs3 column layout (0-indexed):
-    #   col 4  = rhob/rho_0
-    #   col 25 = omega field
-    #   col 26 = rho field
-    #   col 27 = phi field
-    #   col 28 = m_u (effective quark mass)
-    #   col 29 = m_d
-    #   col 30 = m_s
-    
-    for line in lines:
-        parts = [p for p in line.strip().split() if p]
-        if not parts: continue
+    for parts in raw_data:
         
         rho_ratio = float(parts[4])    # rhob / rho_0
         m_u       = float(parts[28])   # effective u-quark scalar mass (MeV)

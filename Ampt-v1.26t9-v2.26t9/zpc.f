@@ -2209,10 +2209,8 @@ c       --- CUSTOM CQMF MODIFICATION: Flavor-dependent mass ---
                  xm1 = xmu_q
                  vpot1 = qv_u
               endif
-              if (ityp1 .gt. 0) then
-                 xm1 = xm1 + vpot1
-              else
-                 xm1 = xm1 - vpot1
+              if (ityp1 .lt. 0) then
+                 vpot1 = -vpot1
               endif
            endif
            
@@ -2231,27 +2229,48 @@ c       --- CUSTOM CQMF MODIFICATION: Flavor-dependent mass ---
                  xm2p = xmu_q
                  vpot2 = qv_u
               endif
-              if (ityp2 .gt. 0) then
-                 xm2p = xm2p + vpot2
-              else
-                 xm2p = xm2p - vpot2
+              if (ityp2 .lt. 0) then
+                 vpot2 = -vpot2
               endif
            endif
            
-           ! Average mass squared for the scattering Kernel
+           ! -----------------------------------------------
+           ! Correct Lorentz structure: s_eff = (E - V)^2 - p^2
+           e1_eff = e(iscat) - vpot1
+           e2_eff = e(jscat) - vpot2
+           
+           s_eff = (e1_eff + e2_eff)**2 
+     &           - (px(iscat) + px(jscat))**2
+     &           - (py(iscat) + py(jscat))**2
+     &           - (pz(iscat) + pz(jscat))**2
+     
+           ! Effective c.m. momentum squared
+           pp2_eff = (s_eff - (xm1 + xm2p)**2)
+     &             * (s_eff - (xm1 - xm2p)**2)
+           pp2_eff = pp2_eff / (4.0d0 * s_eff)
+           
+           ! Fallback safeguard if s_eff goes unphysical
+           if (pp2_eff .le. 0.0d0) then
+              pp2_eff = pp2
+           endif
+           ! -----------------------------------------------
+           
+           ! Average mass squared for the screening Kernel
            xmp2 = ((xm1 + xm2p) / 2.0d0)**2
+           pp2_use = pp2_eff
         else
            xmp2 = xmp ** 2
+           pp2_use = pp2
         endif
 c       ----------------------------------------------------
 
         xm2 = xmu2 + xmp2
         rx=ran1(iseed)
-        that = xm2*(1d0+1d0/((1d0-xm2/(4d0*pp2+xm2))*rx-1d0))
+        that = xm2*(1d0+1d0/((1d0-xm2/(4d0*pp2_use+xm2))*rx-1d0))
 ctest off isotropic scattering:
 c     &     + 1d0/((1d0 - xm2 / (4d0 * pp2 + xm2)) * ran1(2) - 1d0))
 c        if(izpc.eq.100) that=-4d0*pp2*ran1(2)
-        if(izpc.eq.100) that=-4d0*pp2*rx
+        if(izpc.eq.100) that=-4d0*pp2_use*rx
 
         return
         end
