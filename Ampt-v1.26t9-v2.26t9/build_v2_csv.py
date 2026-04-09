@@ -2,7 +2,7 @@ import numpy as np
 
 def build_data():
     in_file = 'DataAnalysis/data_fields_18_oct/file_eta0_T0_fs0.txt'
-    out_file = 'model_data_v2.csv'
+    out_file = 'model_data.csv'
     
     with open(in_file, 'r') as f:
         lines = f.readlines()
@@ -19,13 +19,18 @@ def build_data():
         m_d = float(parts[16])
         m_s = float(parts[17])
         
-        e_u = float(parts[18])
-        e_d = float(parts[19])
-        e_s = float(parts[20])
+        omega_0 = float(parts[13])
+        rho_0 = float(parts[14])
         
-        v_u = e_u - m_u
-        v_d = e_d - m_d
-        v_s = e_s - m_s
+        # SU(3) coupling constants from Parameteric.py
+        # gv = 10.92
+        # gwu = gwd = gru = gv / (2*sqrt(2)) = 3.8608
+        g_v = 3.8608 
+        
+        # Proper CQMF vector potentials from primary meson fields
+        v_u = g_v * omega_0 + g_v * rho_0
+        v_d = g_v * omega_0 - g_v * rho_0
+        v_s = 0.0  # s quark does not couple to omega or rho
         
         # M_B is not really used in ZPC but we can keep a placeholder
         m_b = 939.0
@@ -37,4 +42,4 @@ def build_data():
         
 if __name__ == '__main__':
     build_data()
-    print("model_data_v2.csv created")
+    print("model_data.csv created")
