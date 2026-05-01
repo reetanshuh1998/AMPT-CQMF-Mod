@@ -144,6 +144,9 @@ c
         subroutine inizpc
 
         implicit double precision (a-h, o-z)
+        integer ngetht, npp2fallback
+        common /qmcdiag/ ngetht, npp2fallback
+        save /qmcdiag/
         SAVE   
 
         call readpa
@@ -153,6 +156,9 @@ c
         call inian1
         
         call read_mass_csv
+        
+        ngetht = 0
+        npp2fallback = 0
 
         return
         end
@@ -769,6 +775,8 @@ c
         implicit double precision (a-h, o-z)
         external ran1
         parameter (MAXPTN=400001)
+        double precision xm_eff, vtmp
+        common /qmcpar/ xmu_q, xmd_q, xms_q, iqmc
         common /para1/ mul
 cc      SAVE /para1/
         common /para4/ iftflg, ireflg, igeflg, ibstfg
@@ -860,6 +868,18 @@ ccbz1/25/99end
            pz(i) = pz0(indxi)
            e(i) = e0(indxi)
            xmass(i) = xmass0(indxi)
+c=============================================================
+c  CQMF FIXED UNIFORM DENSITY MODE:
+c  Overwrite xmass(i) with CQMF effective mass for quarks.
+c  This makes ZPC kinematics (energy reconstruction) consistent
+c  with the masses used in getht().
+c=============================================================
+            if (iqmc .eq. 1) then
+               call qmc_mass_vpot_from_ityp(ityp(i), xm_eff, vtmp)
+               xmass(i) = xm_eff
+               e(i) = dsqrt(px(i)**2 + py(i)**2 + pz(i)**2 
+     &                    + xmass(i)**2)
+            endif
            LSTRG1(I) = LSTRG0(INDXI)
            LPART1(I) = LPART0(INDXI)
            vxp(I) = vxp0(INDXI)
@@ -2187,6 +2207,11 @@ cc      SAVE /rndm3/
      &       xmass(MAXPTN), ityp(MAXPTN)
         common /qmcpar/ xmu_q, xmd_q, xms_q, iqmc
         common /qmcvpot/ qv_u, qv_d, qv_s
+        
+        integer ngetht, npp2fallback
+        common /qmcdiag/ ngetht, npp2fallback
+        save /qmcdiag/
+        
         integer idebug_flavor
         SAVE idebug_flavor
         data idebug_flavor /0/
@@ -2198,45 +2223,15 @@ cc      SAVE /rndm3/
 
 c       --- CUSTOM CQMF MODIFICATION: Flavor-dependent mass ---
         if (iqmc .eq. 1) then
+           ngetht = ngetht + 1
+           
            ! Particle 1 Setup
            ityp1 = ityp(iscat)
-           if (ityp1 .eq. 21 .or. ityp1 .eq. 9) then
-              xm1 = 0.0d0
-           else
-              if (abs(ityp1) .eq. 3) then
-                 xm1 = xms_q
-                 vpot1 = qv_s
-              elseif (abs(ityp1) .eq. 1) then
-                 xm1 = xmd_q
-                 vpot1 = qv_d
-              else
-                 xm1 = xmu_q
-                 vpot1 = qv_u
-              endif
-              if (ityp1 .lt. 0) then
-                 vpot1 = -vpot1
-              endif
-           endif
+           call qmc_mass_vpot_from_ityp(ityp1, xm1, vpot1)
            
            ! Particle 2 Setup
            ityp2 = ityp(jscat)
-           if (ityp2 .eq. 21 .or. ityp2 .eq. 9) then
-              xm2p = 0.0d0
-           else
-              if (abs(ityp2) .eq. 3) then
-                 xm2p = xms_q
-                 vpot2 = qv_s
-              elseif (abs(ityp2) .eq. 1) then
-                 xm2p = xmd_q
-                 vpot2 = qv_d
-              else
-                 xm2p = xmu_q
-                 vpot2 = qv_u
-              endif
-              if (ityp2 .lt. 0) then
-                 vpot2 = -vpot2
-              endif
-           endif
+           call qmc_mass_vpot_from_ityp(ityp2, xm2p, vpot2)
            
            if (idebug_flavor .lt. 10) then
               write(6,*) 'CQMF FLAVOR DEBUG | ityp1:', ityp1, 
@@ -2266,6 +2261,7 @@ c       --- CUSTOM CQMF MODIFICATION: Flavor-dependent mass ---
            
            ! Fallback safeguard if s_eff goes unphysical
            if (pp2_eff .le. 0.0d0 .or. s_eff .le. 0.0d0) then
+              npp2fallback = npp2fallback + 1
               that = 0.0d0
               return
            endif
@@ -6496,6 +6492,10 @@ c       particles
 
         common /para5/ iconfg, iordsc
 cc      SAVE /para5/
+        common /qmcpar/ xmu_q, xmd_q, xms_q, iqmc
+        integer ngetht, npp2fallback
+        common /qmcdiag/ ngetht, npp2fallback
+        save /qmcdiag/
         SAVE   
 
         if (iconfg .le. 3) then
@@ -6503,6 +6503,11 @@ cc      SAVE /para5/
         else
            call zpcou2
         end if
+
+        if (iqmc .eq. 1) then
+           write(25,*) 'CQMF diag: ngetht=', ngetht,
+     &                 ' npp2fallback=', npp2fallback
+        endif
 
         return
         end
@@ -6800,6 +6805,54 @@ c      if (j .gt. 97 .or. j .lt. 1) pause
 clin-6/23/00 check random number generator:
       number = number + 1
 c      if(number.le.100000) write(99,*) 'number, ran1=', number,ran1
+
+      return
+      end
+
+c=============================================================
+c  CQMF helper: given ityp, return effective mass and vector V
+c=============================================================
+      subroutine qmc_mass_vpot_from_ityp(ityp_in, xm_out, v_out)
+      implicit double precision (a-h, o-z)
+
+      integer ityp_in
+      double precision xm_out, v_out
+
+      common /qmcpar/ xmu_q, xmd_q, xms_q, iqmc
+      common /qmcvpot/ qv_u, qv_d, qv_s
+
+c     defaults
+      xm_out = 0.0d0
+      v_out  = 0.0d0
+
+      if (iqmc .ne. 1) return
+
+c     gluons / special: keep massless, no V
+      if (ityp_in .eq. 21 .or. ityp_in .eq. 9) then
+         xm_out = 0.0d0
+         v_out  = 0.0d0
+         return
+      endif
+
+c     flavor mapping assumption:
+c       abs(ityp)=1 -> d
+c       abs(ityp)=2 -> u
+c       abs(ityp)=3 -> s
+      if (abs(ityp_in) .eq. 3) then
+         xm_out = xms_q
+         v_out  = qv_s
+      elseif (abs(ityp_in) .eq. 1) then
+         xm_out = xmd_q
+         v_out  = qv_d
+      else
+         xm_out = xmu_q
+         v_out  = qv_u
+      endif
+
+c     antiquark sign flip for vector
+      if (ityp_in .lt. 0) then
+         v_out = -v_out
+      endif
 
       return
       end
