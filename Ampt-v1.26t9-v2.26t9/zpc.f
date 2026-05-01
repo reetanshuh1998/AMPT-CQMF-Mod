@@ -2187,11 +2187,15 @@ cc      SAVE /rndm3/
      &       xmass(MAXPTN), ityp(MAXPTN)
         common /qmcpar/ xmu_q, xmd_q, xms_q, iqmc
         common /qmcvpot/ qv_u, qv_d, qv_s
+        integer idebug_flavor
+        SAVE idebug_flavor
+        data idebug_flavor /0/
         SAVE   
 
         iseed=iseedp
         xmu2 = (hbarc * xmu) ** 2
         
+
 c       --- CUSTOM CQMF MODIFICATION: Flavor-dependent mass ---
         if (iqmc .eq. 1) then
            ! Particle 1 Setup
@@ -2234,6 +2238,13 @@ c       --- CUSTOM CQMF MODIFICATION: Flavor-dependent mass ---
               endif
            endif
            
+           if (idebug_flavor .lt. 10) then
+              write(6,*) 'CQMF FLAVOR DEBUG | ityp1:', ityp1, 
+     &                   ' m1:', xm1, ' v1:', vpot1, 
+     &                   ' | ityp2:', ityp2, ' m2:', xm2p, ' v2:', vpot2
+              idebug_flavor = idebug_flavor + 1
+           endif
+           
            ! -----------------------------------------------
            ! Correct Lorentz structure: s_eff = (E - V)^2 - p^2
            e1_eff = e(iscat) - vpot1
@@ -2245,13 +2256,18 @@ c       --- CUSTOM CQMF MODIFICATION: Flavor-dependent mass ---
      &           - (pz(iscat) + pz(jscat))**2
      
            ! Effective c.m. momentum squared
-           pp2_eff = (s_eff - (xm1 + xm2p)**2)
-     &             * (s_eff - (xm1 - xm2p)**2)
-           pp2_eff = pp2_eff / (4.0d0 * s_eff)
+           if (s_eff .gt. 0.0d0) then
+              pp2_eff = (s_eff - (xm1 + xm2p)**2)
+     &                * (s_eff - (xm1 - xm2p)**2)
+              pp2_eff = pp2_eff / (4.0d0 * s_eff)
+           else
+              pp2_eff = -1.0d0
+           endif
            
            ! Fallback safeguard if s_eff goes unphysical
-           if (pp2_eff .le. 0.0d0) then
-              pp2_eff = pp2
+           if (pp2_eff .le. 0.0d0 .or. s_eff .le. 0.0d0) then
+              that = 0.0d0
+              return
            endif
            ! -----------------------------------------------
            
@@ -2271,6 +2287,11 @@ ctest off isotropic scattering:
 c     &     + 1d0/((1d0 - xm2 / (4d0 * pp2 + xm2)) * ran1(2) - 1d0))
 c        if(izpc.eq.100) that=-4d0*pp2*ran1(2)
         if(izpc.eq.100) that=-4d0*pp2_use*rx
+        
+        ! Map that out to the caller's phase space to prevent dacos(>1) NANs
+        if (iqmc .eq. 1 .and. pp2_use .gt. 0.0d0) then
+           that = that * (pp2 / pp2_use)
+        endif
 
         return
         end
@@ -6861,6 +6882,16 @@ c     --- Zero-initialize vector potentials (safe fallback for iqmc=0) ---
          write(6,*) 'm_u (GeV): ', xmu_q, ' V_u (GeV): ', qv_u
          write(6,*) 'm_d (GeV): ', xmd_q, ' V_d (GeV): ', qv_d
          write(6,*) 'm_s (GeV): ', xms_q, ' V_s (GeV): ', qv_s
+         
+         ! Open parameter log for pure documentation / transparency
+         open(91, file='ana/qmc_params.log', status='unknown')
+         write(91,*) '=== CQMF Custom Masses & Potentials Loaded ==='
+         write(91,*) 'Target density ratio: ', target_rho
+         write(91,*) 'm_u (GeV): ', xmu_q, ' V_u (GeV): ', qv_u
+         write(91,*) 'm_d (GeV): ', xmd_q, ' V_d (GeV): ', qv_d
+         write(91,*) 'm_s (GeV): ', xms_q, ' V_s (GeV): ', qv_s
+         write(91,*) 'ZPC Screening params: alpha=', alpha, ' xmu=', xmu
+         close(91)
       endif
       
       return

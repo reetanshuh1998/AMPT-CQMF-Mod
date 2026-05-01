@@ -57,10 +57,10 @@ def parse_ampt(filename):
 
 # ---- Configuration ----
 files = {
-    'Default':               'ana/ampt_default.dat',
-    r'Mod ($\rho_0$)':       'ana/ampt_modified.dat',
-    r'Mod ($2\rho_0$)':      'ana/ampt_density2.dat',
-    r'Mod ($3\rho_0$)':      'ana/ampt_density3.dat',
+    'Default':               'ana_highstats/ampt_default.dat',
+    r'Mod ($\rho_0$)':       'ana_highstats/ampt_modified.dat',
+    r'Mod ($2\rho_0$)':      'ana_highstats/ampt_density2.dat',
+    r'Mod ($3\rho_0$)':      'ana_highstats/ampt_density3.dat',
 }
 colors = ['royalblue', 'darkorange', 'forestgreen', 'firebrick']
 
@@ -124,8 +124,8 @@ for col, (pid, plabel) in enumerate(species):
     ax_y.set_title(f'{plabel} — Rapidity Distribution')
     ax_y.legend(fontsize=7)
 
-fig.suptitle(r'Particle Production: $p_T$ Spectra and Rapidity Distributions vs Density',
-             fontsize=16, fontweight='bold')
-fig.tight_layout()
-plt.savefig('proton_kaon_production.png', dpi=300)
-print("Saved: proton_kaon_production.png")
+fig.suptitle(r'Particle Production in Au+Au @ 7.7 GeV: $p_T$ Spectra and Rapidity distributions',
+             fontsize=18, fontweight='bold')
+fig.tight_layout(rect=[0, 0.03, 1, 0.95])
+plt.savefig('publication_plots/proton_kaon_production_highstats.png', dpi=300)
+print("Saved: publication_plots/proton_kaon_production_highstats.png")

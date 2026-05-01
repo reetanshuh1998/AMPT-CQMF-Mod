@@ -50,10 +50,10 @@ def calc_ratio(c1, c2):
     return r, err
 
 files = {
-    'Default': "ana/ampt_default.dat",
-    'Mod ($\u03c1_0$)': "ana/ampt_modified.dat",
-    'Mod (2$\u03c1_0$)': "ana/ampt_density2.dat",
-    'Mod (3$\u03c1_0$)': "ana/ampt_density3.dat"
+    'Default': "ana_highstats/ampt_default.dat",
+    'Mod ($\u03c1_0$)': "ana_highstats/ampt_modified.dat",
+    'Mod (2$\u03c1_0$)': "ana_highstats/ampt_density2.dat",
+    'Mod (3$\u03c1_0$)': "ana_highstats/ampt_density3.dat"
 }
 
 all_counts = {}
@@ -91,11 +91,23 @@ for i, (name, counts) in enumerate(all_counts.items()):
                     textcoords="offset points",
                     ha='center', va='bottom', fontsize=8, rotation=90)
 
-ax.set_ylabel('Particle Ratio')
-ax.set_title(r'Particle Ratios in Au+Au @ $\sqrt{s_{NN}}$=7.7 GeV vs Density')
+# STAR data for 7.7 GeV (approximate central values from PRC 96, 044904)
+star_ratios = {
+    'K+/pi+': (0.155, 0.015),
+    'K-/pi-': (0.042, 0.005),
+    'p/pi+': (0.35, 0.03),
+    'pbar/pi-': (0.007, 0.001)
+}
+
+star_vals = [star_ratios[r][0] for r in ratios]
+star_errs = [star_ratios[r][1] for r in ratios]
+ax.errorbar(x, star_vals, yerr=star_errs, fmt='ks', markersize=8, label='STAR (0-5%)', capsize=5)
+
+ax.set_ylabel('Particle Ratio', fontsize=12)
+ax.set_title(r'Particle Ratios in Au+Au @ $\sqrt{s_{NN}}$=7.7 GeV (AMPT vs STAR)', fontsize=14)
 ax.set_xticks(x)
-ax.set_xticklabels(ratios)
-ax.legend()
+ax.set_xticklabels(ratios, fontsize=11)
+ax.legend(fontsize=10)
 fig.tight_layout()
-plt.savefig("particle_ratios_density_scan.png", dpi=300)
-print("Plot saved to particle_ratios_density_scan.png")
+plt.savefig("publication_plots/particle_ratios_comparison.png", dpi=300)
+print("Plot saved to publication_plots/particle_ratios_comparison.png")

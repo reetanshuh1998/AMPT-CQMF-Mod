@@ -33,10 +33,10 @@ def extract_pt_data(filename, target_pids):
     return np.array(pt_list), max(1, num_events)
 
 files = {
-    'Default': "ana/ampt_default.dat",
-    'Mod ($\u03c1_0$)': "ana/ampt_modified.dat",
-    'Mod (2$\u03c1_0$)': "ana/ampt_density2.dat",
-    'Mod (3$\u03c1_0$)': "ana/ampt_density3.dat"
+    'Default': "ana_highstats/ampt_default.dat",
+    'Mod ($\u03c1_0$)': "ana_highstats/ampt_modified.dat",
+    'Mod (2$\u03c1_0$)': "ana_highstats/ampt_density2.dat",
+    'Mod (3$\u03c1_0$)': "ana_highstats/ampt_density3.dat"
 }
 colors = ['royalblue', 'darkorange', 'forestgreen', 'firebrick']
 
@@ -66,18 +66,18 @@ for i, name in enumerate(files.keys()):
     ax2.plot(bin_centers, inv_yield_pi, color=colors[i], label=name, marker='s', markersize=4)
 
 ax1.set_yscale('log')
-ax1.set_xlabel('$p_T$ (GeV/c)')
-ax1.set_ylabel('$(1/2\pi p_T) d^2N/dydp_T$')
-ax1.set_title('Invariant $p_T$ Spectra: Kaons ($K^\pm$)')
+ax1.set_xlabel(r'$p_T$ (GeV/c)')
+ax1.set_ylabel(r'$(1/2\pi p_T) d^2N/dydp_T$')
+ax1.set_title(r'Invariant $p_T$ Spectra: Kaons ($K^\pm$)')
 ax1.legend()
 
 ax2.set_yscale('log')
-ax2.set_xlabel('$p_T$ (GeV/c)')
-ax2.set_ylabel('$(1/2\pi p_T) d^2N/dydp_T$')
-ax2.set_title('Invariant $p_T$ Spectra: Pions ($\pi^\pm$)')
+ax2.set_xlabel(r'$p_T$ (GeV/c)')
+ax2.set_ylabel(r'$(1/2\pi p_T) d^2N/dydp_T$')
+ax2.set_title(r'Invariant $p_T$ Spectra: Pions ($\pi^\pm$)')
 ax2.legend()
 
-fig.suptitle('Transverse Momentum ($p_T$) Spectra vs Density', fontsize=14)
-fig.tight_layout()
-plt.savefig("pt_spectra_density_scan.png", dpi=300)
-print("Plot saved to pt_spectra_density_scan.png")
+fig.suptitle(r'Transverse Momentum ($p_T$) Spectra in Au+Au @ 7.7 GeV', fontsize=16, fontweight='bold')
+fig.tight_layout(rect=[0, 0.03, 1, 0.95])
+plt.savefig("publication_plots/pt_spectra_highstats.png", dpi=300)
+print("Plot saved to publication_plots/pt_spectra_highstats.png")

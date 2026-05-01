@@ -39,10 +39,10 @@ def extract_stopping_data(filename):
     return data, max(num_events, 1)
 
 files = {
-    'Default': "ana/ampt_default.dat",
-    'Mod ($\u03c1_0$)': "ana/ampt_modified.dat",
-    'Mod (2$\u03c1_0$)': "ana/ampt_density2.dat",
-    'Mod (3$\u03c1_0$)': "ana/ampt_density3.dat"
+    'Default': "ana_highstats/ampt_default.dat",
+    'Mod ($\u03c1_0$)': "ana_highstats/ampt_modified.dat",
+    'Mod (2$\u03c1_0$)': "ana_highstats/ampt_density2.dat",
+    'Mod (3$\u03c1_0$)': "ana_highstats/ampt_density3.dat"
 }
 colors = ['royalblue', 'darkorange', 'forestgreen', 'firebrick']
 
@@ -85,13 +85,13 @@ for i, name in enumerate(files.keys()):
 
 axs[0].axhline(0, color='gray', linestyle='--', linewidth=1)
 axs[0].set_xlabel('Rapidity ($y$)')
-axs[0].set_ylabel('Net-Proton $dN/dy$ ($p - \overline{p}$)')
+axs[0].set_ylabel(r'Net-Proton $dN/dy$ ($p - \overline{p}$)')
 axs[0].set_title('Baryon Stopping Profile')
 axs[0].legend()
 
 axs[1].axhline(1, color='gray', linestyle='--', linewidth=1)
 axs[1].set_xlabel('Rapidity ($y$)')
-axs[1].set_ylabel('$\overline{p} / p$ Ratio')
+axs[1].set_ylabel(r'$\overline{p} / p$ Ratio')
 axs[1].set_title('Antimatter/Matter Asymmetry vs Rapidity')
 axs[1].set_ylim(0, 1.5)
 axs[1].legend()
@@ -102,7 +102,7 @@ axs[2].set_ylabel('$K^+ / K^-$ Ratio')
 axs[2].set_title('Strangeness Source Asymmetry vs Rapidity')
 axs[2].legend()
 
-fig.suptitle('Vector Potential Impacts: Baryon Stopping and Asymmetries', fontsize=15)
-fig.tight_layout()
-plt.savefig("baryon_stopping_asymmetry.png", dpi=300)
-print("Plot saved to baryon_stopping_asymmetry.png")
+fig.suptitle('Vector Potential Impacts: Baryon Stopping and Asymmetries (7.7 GeV)', fontsize=18, fontweight='bold')
+fig.tight_layout(rect=[0, 0.03, 1, 0.95])
+plt.savefig("publication_plots/baryon_stopping_comparison.png", dpi=300)
+print("Plot saved to publication_plots/baryon_stopping_comparison.png")

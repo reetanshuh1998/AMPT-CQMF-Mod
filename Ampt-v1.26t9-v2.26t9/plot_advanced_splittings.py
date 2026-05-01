@@ -57,10 +57,10 @@ def calc_binned_flow(x_data, v_data, bins):
     return bin_centers, np.array(v_mean)
 
 files = {
-    'Default': "ana/ampt_default.dat",
-    'Mod ($\u03c1_0$)': "ana/ampt_modified.dat",
-    'Mod (2$\u03c1_0$)': "ana/ampt_density2.dat",
-    'Mod (3$\u03c1_0$)': "ana/ampt_density3.dat"
+    'Default': "ana_highstats/ampt_default.dat",
+    'Mod ($\u03c1_0$)': "ana_highstats/ampt_modified.dat",
+    'Mod (2$\u03c1_0$)': "ana_highstats/ampt_density2.dat",
+    'Mod (3$\u03c1_0$)': "ana_highstats/ampt_density3.dat"
 }
 colors = ['royalblue', 'darkorange', 'forestgreen', 'firebrick']
 
@@ -89,28 +89,37 @@ for i, name in enumerate(files.keys()):
         delta_v2 = v2_p - v2_pbar
         ax1.plot(pt_cen, delta_v2, marker='D', color=colors[i], label=name)
 
-ax1.axhline(0, color='gray', linestyle='--')
-ax1.set_xlabel('$p_T$ (GeV/c)')
-ax1.set_ylabel('$\Delta v_2 (p - \overline{p})$')
-ax1.set_title('Proton - Antiproton Elliptic Flow Splitting vs $p_T$')
-ax1.legend()
+# STAR data overlay for comparison
+def load_star_data_np(filename, x_col=0, y_col=1, err_col=4):
+    if not os.path.exists(filename): return None, None, None
+    try:
+        data = np.genfromtxt(filename, delimiter=',', skip_header=1)
+        return data[:, x_col], data[:, y_col], data[:, err_col]
+    except: return None, None, None
 
-# For a second plot, we just plot v2(p) to ensure it's not simply zero
-ax2 = axs[1]
-for i, name in enumerate(files.keys()):
-    d_p = all_data[name]['p']
-    if len(d_p['pt']) > 0:
-        mask_p = np.abs(d_p['y']) < 0.5
-        pt_cen, v2_p = calc_binned_flow(d_p['pt'][mask_p], d_p['v2'][mask_p], pt_bins)
-        ax2.plot(pt_cen, v2_p, marker='o', color=colors[i], label=name)
+# Plot STAR v2 splitting
+s_pt, s_dv2, s_err = load_star_data_np('star_data/v2_splitting_p_pbar_7.7_10_40.csv')
+if s_pt is not None:
+    ax1.errorbar(s_pt, s_dv2, yerr=s_err, fmt='ks', label='STAR (10-40%)', capsize=3, markersize=6, alpha=0.8)
 
-ax2.axhline(0, color='gray', linestyle='--')
-ax2.set_xlabel('$p_T$ (GeV/c)')
-ax2.set_ylabel('$v_2$ (Protons)')
-ax2.set_title('Proton Elliptic Flow ($v_2$) vs $p_T$')
-ax2.legend()
+ax1.axhline(0, color='black', linewidth=0.8)
+ax1.set_xlabel('$p_T$ (GeV/c)', fontsize=12)
+ax1.set_ylabel(r'$\Delta v_2 (p - \overline{p})$', fontsize=12)
+ax1.set_title('Proton - Antiproton Elliptic Flow Splitting', fontsize=14)
+ax1.legend(fontsize=10)
 
-fig.suptitle('Proton/Antiproton Vector Potential Splitting Signatures', fontsize=15)
-fig.tight_layout()
-plt.savefig("proton_v2_splitting.png", dpi=300)
-print("Plot saved to proton_v2_splitting.png")
+# Plot STAR v2(p) for comparison on ax2
+s_pt_p, s_v2_p, s_err_p = load_star_data_np('star_data/v2_proton_7.7_0_10.csv')
+if s_pt_p is not None:
+    ax2.errorbar(s_pt_p, s_v2_p, yerr=s_err_p, fmt='ks', label='STAR (0-10%)', capsize=3, markersize=6, alpha=0.8)
+
+ax2.axhline(0, color='black', linewidth=0.8)
+ax2.set_xlabel('$p_T$ (GeV/c)', fontsize=12)
+ax2.set_ylabel('$v_2$ (Protons)', fontsize=12)
+ax2.set_title('Proton Elliptic Flow $v_2(p_T)$', fontsize=14)
+ax2.legend(fontsize=10)
+
+fig.suptitle('Proton/Antiproton Vector Potential Signatures (7.7 GeV Au+Au)', fontsize=16)
+fig.tight_layout(rect=[0, 0.03, 1, 0.95])
+plt.savefig("publication_plots/proton_v2_splitting_comparison.png", dpi=300)
+print("Plot saved to publication_plots/proton_v2_splitting_comparison.png")

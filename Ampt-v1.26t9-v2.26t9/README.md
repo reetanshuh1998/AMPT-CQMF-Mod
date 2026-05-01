@@ -5,7 +5,7 @@ This repository hosts a modified version of the **A Multi-Phase Transport (AMPT)
 
 Standard AMPT's partonic cascade module (ZPC - Zhang's Parton Cascade) employs fixed, flavor-independent constituent quark masses for all partonic interactions. This heavily simplifies the in-medium evolution of the Quark-Gluon Plasma (QGP), especially at lower collision energies ($\sqrt{s_{NN}} \sim 7.7$ GeV) corresponding to the RHIC Beam Energy Scan (BES), where the fireball possesses a high baryon chemical potential ($\mu_B$).
 
-In this major modification, we dynamically introduce **baryon density-dependent, flavor-specific quark masses** ($m_u, m_d, m_s$) derived from a **Chiral SU(3) Quark Mean Field (CQMF)** model directly into the ZPC scattering kernel. 
+In this major modification, we implement a **Fixed Uniform Medium Density Scan** (or Fixed-$\rho$ scan). We introduce **baryon density-dependent, flavor-specific quark masses** ($m_u, m_d, m_s$) derived from a **Chiral SU(3) Quark Mean Field (CQMF)** model directly into the ZPC scattering kernel. This phenomenological fixed-density approximation applies the effective masses and vector potentials uniformly across the entire partonic cascade for a given target density.
 
 ### What does this accomplish?
 By mapping the CQMF effective constituent masses to the partons during their pQCD scatterings inside ZPC, the momentum transfers ($\hat{t}$ Mandelstam variables) and cross-sections naturally reflect the chiral symmetry restoring scalar potentials and vector repulsion potentials present in dense nuclear matter. This explicitly splits the interactions of:
@@ -25,9 +25,9 @@ At finite baryonic densities, the interactions of constituent quarks with backgr
 All custom modifications in the source code can be searched via the `c --- CUSTOM CQMF MODIFICATION ---` marker.
 
 ### 1. The Parton Cascade (`zpc.f`)
-- **`subroutine read_mass_csv()`**: A new data-ingestion routine appended to the end of `zpc.f`. It reads the desired target density from `input.density`, opens `model_data.csv`, and linearly interpolates the scalar masses ($m_u, m_d, m_s$) and vector potentials ($V_u, V_d, V_s$) at that density. These are stored globally via `common /qmcpar/` and `common /qmcvpot/`. Vector potentials are safely zero-initialized for the `iqmc=0` fallback path.
+- **`subroutine read_mass_csv()`**: A new data-ingestion routine appended to the end of `zpc.f`. It reads the desired target density from `input.density`, opens `model_data.csv`, and linearly interpolates the scalar masses ($m_u, m_d, m_s$) and vector potentials ($V_u, V_d, V_s$) for that uniform medium. These are stored globally via `common /qmcpar/` and `common /qmcvpot/`. Vector potentials are safely zero-initialized for the `iqmc=0` fallback path.
 - **`subroutine inizpc()`**: We injected a call to `read_mass_csv()` at the very beginning of the partonic phase initialization.
-- **`subroutine getht()`**: The main scattering kernel. It previously assumed an average global mass `xmp`. We modified the logic to dynamically check the colliding parton flavors (`ityp(iscat)`) and load our custom CQMF masses for $u, d,$ or $s$, applying the sign-flipped vector potential ($+V_q$ for quarks, $-V_q$ for antiquarks) prior to calculating the scattering angle probability distribution. Local variables are named `vpot1`/`vpot2` to avoid clashing with the `/ilist3/` common block.
+- **`subroutine getht()`**: The main scattering kernel. It previously assumed an average global mass `xmp`. We modified the logic to load our custom CQMF masses for $u, d,$ or $s$, applying the sign-flipped vector potential ($+V_q$ for quarks, $-V_q$ for antiquarks) purely inside the kernel to calculate the effective scattering angle probability distribution ($E_{eff} = E - V$). The physical propagation of the parton remains strictly free-streaming using vacuum kinematics, providing a highly stable phenomenological map.
 
 ### 2. Configuration Interfaces
 - **`input.density`**: A required 2-line configuration file. Line 1: `Target Baryonic Density Ratio (rho/rho_0)`. Line 2: `Toggle (1=Mod ON, 0=Default)`.

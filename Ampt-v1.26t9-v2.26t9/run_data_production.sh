@@ -10,8 +10,12 @@ if [ ! -f "ampt" ]; then
     exit 1
 fi
 
+# Ensure the authoritative CSV is freshly built
+echo "Generating authoritative model_data.csv..."
+python3 build_v2_csv.py
+
 # General Production Configuration
-NUM_EVENTS=20
+NUM_EVENTS=2000
 
 # Array of configurations
 names=("default" "modified" "density2" "density3")
@@ -49,8 +53,9 @@ for i in "${!names[@]}"; do
         if [ -f ana/ampt.dat ]; then
             cp ana/ampt.dat "../ana/ampt_${name}.dat"
             echo "Finished $name: successfully copied ampt.dat"
+            rm model_data.csv  # Clean up duplicate CSV to prevent confusion
         else
-            echo "Failed $name: ana/ampt.dat not found"
+            echo "ERROR: $name failed to produce ana/ampt.dat"
         fi
     ) &
 done

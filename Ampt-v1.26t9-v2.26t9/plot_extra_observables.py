@@ -60,10 +60,10 @@ def calc_binned_mean(x_data, v_data, bins):
     return bin_centers, np.array(v_mean)
 
 files = {
-    'Default': "ana/ampt_default.dat",
-    'Mod ($\u03c1_0$)': "ana/ampt_modified.dat",
-    'Mod (2$\u03c1_0$)': "ana/ampt_density2.dat",
-    'Mod (3$\u03c1_0$)': "ana/ampt_density3.dat"
+    'Default': "ana_highstats/ampt_default.dat",
+    'Mod ($\u03c1_0$)': "ana_highstats/ampt_modified.dat",
+    'Mod (2$\u03c1_0$)': "ana_highstats/ampt_density2.dat",
+    'Mod (3$\u03c1_0$)': "ana_highstats/ampt_density3.dat"
 }
 colors = ['royalblue', 'darkorange', 'forestgreen', 'firebrick']
 
@@ -101,7 +101,7 @@ for i, name in enumerate(files.keys()):
 
 ax.axhline(0, color='gray', linestyle='--')
 ax.set_xlabel('$p_T$ (GeV/c)')
-ax.set_ylabel('$\Delta v_2 (K^+ - K^-)$')
+ax.set_ylabel(r'$\Delta v_2 (K^+ - K^-)$')
 ax.set_title('Elliptic Flow Splitting vs $p_T$')
 ax.legend()
 
@@ -172,11 +172,11 @@ for i, name in enumerate(files.keys()):
 
 ax.set_yscale('log')
 ax.set_xlabel('$m_T - m_0$ (GeV/c$^2$)')
-ax.set_ylabel('$(1/2\pi m_T) d^2N/dydm_T$')
+ax.set_ylabel(r'$(1/2\pi m_T) d^2N/dydm_T$')
 ax.set_title('$m_T$ Spectra offset for $K^+$')
 ax.legend()
 
-fig.suptitle('Advanced CQMF Observables in Au+Au @ 7.7 GeV', fontsize=18, y=0.98)
-fig.tight_layout()
-plt.savefig("advanced_observables.png", dpi=300)
-print("Plot saved to advanced_observables.png")
+fig.suptitle('Advanced CQMF Observables in Au+Au @ 7.7 GeV', fontsize=20, fontweight='bold', y=0.98)
+fig.tight_layout(rect=[0, 0.03, 1, 0.95])
+plt.savefig("publication_plots/advanced_observables_highstats.png", dpi=300)
+print("Plot saved to publication_plots/advanced_observables_highstats.png")
