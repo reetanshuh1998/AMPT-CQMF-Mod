@@ -2192,6 +2192,7 @@ c        write(99,*) 'iscat,jscat,xmp,xmu,that=',iscat,jscat,xmp,xmu,that
 c       this subroutine is used to get \hat{t} for a particular processes
 
         implicit double precision (a-h, o-z)
+        double precision s_star, pp2_star, e1_tot, e2_tot, s_tot, pp2_tot
 
         parameter (hbarc = 0.197327054d0)
         parameter (MAXPTN=400001)
@@ -2241,27 +2242,47 @@ c       --- CUSTOM CQMF MODIFICATION: Flavor-dependent mass ---
            endif
            
            ! -----------------------------------------------
-           ! Correct Lorentz structure: s_tot = (E* + V)^2 - p^2
-           e1_eff = e(iscat) + vpot1
-           e2_eff = e(jscat) + vpot2
+           ! 1. Pure Kinetic Phase Space (Guaranteed Physical with m*)
+           s_star = (e(iscat) + e(jscat))**2 
+     &            - (px(iscat) + px(jscat))**2
+     &            - (py(iscat) + py(jscat))**2
+     &            - (pz(iscat) + pz(jscat))**2
            
-           s_eff = (e1_eff + e2_eff)**2 
+           if (s_star .gt. 1.0d-10) then
+              pp2_star = (s_star - (xm1 + xm2p)**2) 
+     &                 * (s_star - (xm1 - xm2p)**2)
+     &                 / (4.0d0 * s_star)
+           else
+              pp2_star = 0.0d0
+           endif
+
+           ! 2. Canonical Phase Space (Including Vector Potentials)
+           e1_tot = e(iscat) + vpot1
+           e2_tot = e(jscat) + vpot2
+           s_tot = (e1_tot + e2_tot)**2 
      &           - (px(iscat) + px(jscat))**2
      &           - (py(iscat) + py(jscat))**2
      &           - (pz(iscat) + pz(jscat))**2
-     
-           ! Effective c.m. momentum squared
-           if (s_eff .gt. 0.0d0) then
-              pp2_eff = (s_eff - (xm1 + xm2p)**2)
-     &                * (s_eff - (xm1 - xm2p)**2)
-              pp2_eff = pp2_eff / (4.0d0 * s_eff)
+
+           if (s_tot .gt. 1.0d-10) then
+              pp2_tot = (s_tot - (xm1 + xm2p)**2) 
+     &                * (s_tot - (xm1 - xm2p)**2)
+     &                / (4.0d0 * s_tot)
            else
-              pp2_eff = -1.0d0
+              pp2_tot = -1.0d0
            endif
            
-           ! Fallback safeguard if s_eff goes unphysical
-           if (pp2_eff .le. 0.0d0 .or. s_eff .le. 0.0d0) then
+           ! 3. STABILITY: Fallback to kinetic phase space instead of cancelling
+           ngetht = ngetht + 1
+           if (pp2_tot .le. 0.0d0) then
               npp2fallback = npp2fallback + 1
+              pp2_use = pp2_star
+           else
+              pp2_use = pp2_tot
+           endif
+           
+           ! Absolute safety check
+           if (pp2_use .le. 0.0d0) then
               that = 0.0d0
               return
            endif
@@ -2269,7 +2290,7 @@ c       --- CUSTOM CQMF MODIFICATION: Flavor-dependent mass ---
            
            ! Average mass squared for the screening Kernel
            xmp2 = ((xm1 + xm2p) / 2.0d0)**2
-           pp2_use = pp2_eff
+           ! pp2_use is already set above
         else
            xmp2 = xmp ** 2
            pp2_use = pp2
