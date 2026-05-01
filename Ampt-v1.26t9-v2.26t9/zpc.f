@@ -2241,9 +2241,9 @@ c       --- CUSTOM CQMF MODIFICATION: Flavor-dependent mass ---
            endif
            
            ! -----------------------------------------------
-           ! Correct Lorentz structure: s_eff = (E - V)^2 - p^2
-           e1_eff = e(iscat) - vpot1
-           e2_eff = e(jscat) - vpot2
+           ! Correct Lorentz structure: s_tot = (E* + V)^2 - p^2
+           e1_eff = e(iscat) + vpot1
+           e2_eff = e(jscat) + vpot2
            
            s_eff = (e1_eff + e2_eff)**2 
      &           - (px(iscat) + px(jscat))**2

@@ -79,7 +79,7 @@ Extracts and normalizes transverse momentum ($p_T = \sqrt{p_x^2 + p_y^2}$) histo
 
 ### `plot_v1_v2.py`
 Calculates the spatial anisotropies transferred to momentum space:
-* **Directed Flow ($v_1 = \langle p_x/p_T \rangle$)**: Mapped against Rapidity ($y$) for Protons. Directly captures the "bounce-off" vector repulsion effects characteristic of dense baryonic matter.
+* **Directed Flow ($v_1 = \langle p_x/p_T \rangle$)**: Mapped against Rapidity ($y$) for Protons. Captures the asymmetry introduced by vector self-energy modifications to the scattering kinematics.
 * **Elliptic Flow ($v_2 = \langle (p_x^2 - p_y^2)/p_T^2 \rangle$)**: Mapped against $p_T$ for Pions.
 
 ### `plot_extra_observables.py`
