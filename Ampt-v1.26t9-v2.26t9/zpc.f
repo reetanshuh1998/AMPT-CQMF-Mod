@@ -142,7 +142,21 @@ c
 ******************************************************************************
 
         subroutine inizpc
-
+c
+c --- CQMF MODIFICATION [inizpc] ---
+c WHAT: Added call to read_mass_csv() and initialization of
+c       scattering diagnostic counters (ngetht, npp2fallback).
+c WHY:  read_mass_csv() loads CQMF effective quark masses (m*)
+c       and vector self-energies (V) from model_data.csv at the
+c       target baryon density specified in input.density.
+c       The counters track how often the vector-shifted phase
+c       space (s_tot) becomes unphysical in getht(), requiring
+c       a fallback to the pure kinetic invariant (s_star).
+c HOW:  read_mass_csv() populates common blocks /qmcpar/ and
+c       /qmcvpot/. If input.density or model_data.csv is missing,
+c       iqmc is set to 0 and standard ZPC runs unmodified.
+c --- END CQMF MODIFICATION ---
+c
         implicit double precision (a-h, o-z)
         integer ngetht, npp2fallback
         common /qmcdiag/ ngetht, npp2fallback
@@ -775,6 +789,25 @@ c
         implicit double precision (a-h, o-z)
         external ran1
         parameter (MAXPTN=400001)
+c
+c --- CQMF MODIFICATION [inirec] ---
+c WHAT: Added xm_eff/vtmp locals and /qmcpar/ access so that
+c       we can overwrite xmass(i) with CQMF effective masses
+c       during parton initialization (see loop below at L877).
+c WHY:  Without this, ZPC stores vacuum masses in xmass(i) and
+c       uses E = sqrt(p^2 + m_vac^2). The scattering kernel
+c       (getht) would then use m* for angle sampling but the
+c       rest of ZPC would propagate with m_vac -- two different
+c       dispersion relations in a single collision (physically
+c       inconsistent). By overwriting xmass(i) = m* here, the
+c       on-shell relation E = sqrt(p^2 + m*^2) holds globally.
+c HOW:  For each parton i, call qmc_mass_vpot_from_ityp() to
+c       get the flavor-dependent m*. Replace xmass(i), then
+c       recompute e(i) from the 3-momentum and new mass.
+c       Vector potential vtmp is retrieved but not stored;
+c       it only enters in the scattering kernel (getht).
+c --- END CQMF MODIFICATION ---
+c
         double precision xm_eff, vtmp
         common /qmcpar/ xmu_q, xmd_q, xms_q, iqmc
         common /para1/ mul
@@ -868,12 +901,14 @@ ccbz1/25/99end
            pz(i) = pz0(indxi)
            e(i) = e0(indxi)
            xmass(i) = xmass0(indxi)
-c=============================================================
-c  CQMF FIXED UNIFORM DENSITY MODE:
-c  Overwrite xmass(i) with CQMF effective mass for quarks.
-c  This makes ZPC kinematics (energy reconstruction) consistent
-c  with the masses used in getht().
-c=============================================================
+c --- CQMF MODIFICATION [inirec mass overwrite] ---
+c Replace the vacuum mass xmass0 with the CQMF effective mass m*
+c for the target baryon density. Recompute on-shell energy:
+c   E_i = sqrt(px_i^2 + py_i^2 + pz_i^2 + m*_i^2)
+c Gluons (ityp=21,9) get m*=0 automatically.
+c This ensures that ALL of ZPC -- collision finding, scattering,
+c and final-state output -- uses a single consistent dispersion.
+c --- END CQMF MODIFICATION ---
             if (iqmc .eq. 1) then
                call qmc_mass_vpot_from_ityp(ityp(i), xm_eff, vtmp)
                xmass(i) = xm_eff
@@ -2188,9 +2223,41 @@ c        write(99,*) 'iscat,jscat,xmp,xmu,that=',iscat,jscat,xmp,xmu,that
         end
 
         subroutine getht(iscat, jscat, pp2, that)
-
+c
 c       this subroutine is used to get \hat{t} for a particular processes
-
+c
+c --- CQMF MODIFICATION [getht] ---
+c WHAT: When iqmc=1, replace the default flavor-blind hat{t}
+c       sampling with a CQMF-aware calculation that uses:
+c       (a) flavor-dependent effective masses m*(u,d,s)
+c       (b) flavor-dependent vector self-energies V(u,d,s)
+c       to compute the Mandelstam invariant and sample hat{t}.
+c
+c WHY:  In dense baryonic matter (high mu_B), the chiral
+c       condensate partially restores and meson mean-fields
+c       shift quark masses. The vector self-energy V flips
+c       sign for antiquarks (+V_q vs -V_q), creating a
+c       matter-antimatter asymmetry in scattering kinematics.
+c       This is the primary mechanism for generating proton
+c       vs antiproton v2 splitting at RHIC BES energies.
+c
+c HOW:  Two invariants are computed ("Option B" stability):
+c       1) s_star: pure kinetic, using e(i) which already
+c          contains m* (set in inirec). Guaranteed physical.
+c       2) s_tot:  canonical, adding vector potentials
+c          E_tot = E* + V. Produces the flavor splitting
+c          but can occasionally go unphysical.
+c       pp2_use = pp2_tot if physical, else pp2_star (fallback).
+c       The fallback rate is logged via /qmcdiag/ counters.
+c       Finally, hat{t} is remapped to the caller's pp2 to
+c       prevent NaN in the angular reconstruction (dacos).
+c
+c NOTE: Parton propagation remains free-streaming (no grad V
+c       forces). Medium effects enter ONLY through modified
+c       scattering kinematics. This is explicitly stated in
+c       the paper methodology section.
+c --- END CQMF MODIFICATION ---
+c
         implicit double precision (a-h, o-z)
         double precision s_star, pp2_star, e1_tot, e2_tot, s_tot, pp2_tot
 
@@ -6508,7 +6575,18 @@ c       particles
 ******************************************************************************
 
         subroutine zpcou
-
+c
+c --- CQMF MODIFICATION [zpcou] ---
+c WHAT: After standard ZPC output, print a diagnostic summary
+c       of the CQMF scattering statistics to ana/zpc.res (unit 25).
+c WHY:  Transparency for reviewers. The fallback_ratio shows what
+c       fraction of collisions had unphysical canonical phase space
+c       (pp2_tot<=0) and reverted to the kinetic invariant (pp2_star).
+c       A healthy run should show fallback_ratio << 5%.
+c HOW:  Reads cumulative counters from /qmcdiag/ common block.
+c       These are incremented in getht() and zeroed in inizpc().
+c --- END CQMF MODIFICATION ---
+c
         implicit double precision (a-h, o-z)
 
         common /para5/ iconfg, iordsc
@@ -6839,7 +6917,29 @@ c      if(number.le.100000) write(99,*) 'number, ran1=', number,ran1
       end
 
 c=============================================================
-c  CQMF helper: given ityp, return effective mass and vector V
+c --- CQMF MODIFICATION [qmc_mass_vpot_from_ityp] ---
+c
+c WHAT: Centralized helper that maps a ZPC particle type code
+c       (ityp) to its CQMF effective mass (m*) and vector
+c       self-energy (V). Called from both inirec and getht.
+c
+c WHY:  Eliminates redundant flavor-mapping logic. Provides
+c       a single authoritative location for the PDG->CQMF
+c       mapping, making the code easier to audit and extend
+c       (e.g., for future local-density evolution where m*
+c       and V would also depend on spatial coordinates).
+c
+c HOW:  Uses ZPC's internal flavor codes:
+c         abs(ityp)=1 -> d quark   (mass=xmd_q, V=qv_d)
+c         abs(ityp)=2 -> u quark   (mass=xmu_q, V=qv_u)
+c         abs(ityp)=3 -> s quark   (mass=xms_q, V=qv_s)
+c         ityp=21 or 9 -> gluon    (mass=0, V=0)
+c       For antiquarks (ityp < 0), the vector self-energy
+c       sign is flipped: V_qbar = -V_q. This is the physical
+c       origin of matter-antimatter splitting in observables.
+c       If iqmc=0 (default mode), returns m*=0, V=0 immediately.
+c
+c --- END CQMF MODIFICATION ---
 c=============================================================
       subroutine qmc_mass_vpot_from_ityp(ityp_in, xm_out, v_out)
       implicit double precision (a-h, o-z)
@@ -6850,23 +6950,20 @@ c=============================================================
       common /qmcpar/ xmu_q, xmd_q, xms_q, iqmc
       common /qmcvpot/ qv_u, qv_d, qv_s
 
-c     defaults
+c     defaults (safe for iqmc=0 or unknown particle types)
       xm_out = 0.0d0
       v_out  = 0.0d0
 
       if (iqmc .ne. 1) return
 
-c     gluons / special: keep massless, no V
+c     gluons (ityp=21 in HIJING, ityp=9 in some ZPC modes)
       if (ityp_in .eq. 21 .or. ityp_in .eq. 9) then
          xm_out = 0.0d0
          v_out  = 0.0d0
          return
       endif
 
-c     flavor mapping assumption:
-c       abs(ityp)=1 -> d
-c       abs(ityp)=2 -> u
-c       abs(ityp)=3 -> s
+c     quark flavor mapping
       if (abs(ityp_in) .eq. 3) then
          xm_out = xms_q
          v_out  = qv_s
@@ -6878,7 +6975,7 @@ c       abs(ityp)=3 -> s
          v_out  = qv_u
       endif
 
-c     antiquark sign flip for vector
+c     antiquark: flip vector self-energy sign (V_qbar = -V_q)
       if (ityp_in .lt. 0) then
          v_out = -v_out
       endif
@@ -6887,6 +6984,42 @@ c     antiquark sign flip for vector
       end
 
       subroutine read_mass_csv
+c
+c --- CQMF MODIFICATION [read_mass_csv] ---
+c
+c WHAT: Data ingestion routine that reads the target baryon
+c       density from 'input.density' and loads the CQMF
+c       effective quark masses and vector self-energies from
+c       'model_data.csv' via linear interpolation.
+c
+c WHY:  The CQMF model (Singh et al., PRD 111, 054001, 2025)
+c       predicts density-dependent constituent quark masses
+c       m*(rho) and vector potentials V(rho) from chiral SU(3)
+c       mean-field equations. By loading these at a fixed
+c       target density, we implement a "Fixed Uniform Medium
+c       Density Scan" -- a phenomenological approximation
+c       where the entire QGP experiences the same medium.
+c
+c HOW:  1) Read target_rho and iqmc toggle from 'input.density'
+c       2) If iqmc=1, parse 'model_data.csv' (8 columns:
+c          density, m_u, m_d, m_s, M_B, V_u, V_d, V_s)
+c       3) Linearly interpolate to target_rho
+c       4) Convert MeV -> GeV (CSV stores values in MeV)
+c       5) Store in /qmcpar/ (masses) and /qmcvpot/ (vectors)
+c       6) Write to stdout and ana/qmc_params.log for audit
+c       If any file is missing, iqmc=0 and ZPC runs unmodified.
+c
+c INPUT FILES:
+c   input.density  - Line 1: target rho/rho_0, Line 2: iqmc toggle
+c   model_data.csv - Generated by build_v2_csv.py from CQMF fields
+c
+c OUTPUT:
+c   /qmcpar/:  xmu_q, xmd_q, xms_q (effective masses in GeV)
+c   /qmcvpot/: qv_u, qv_d, qv_s (vector self-energies in GeV)
+c   ana/qmc_params.log (human-readable parameter record)
+c
+c --- END CQMF MODIFICATION ---
+c
       implicit double precision (a-h, o-z)
       common /qmcpar/ xmu_q, xmd_q, xms_q, iqmc
       common /qmcvpot/ qv_u, qv_d, qv_s
@@ -6899,7 +7032,7 @@ c     antiquark sign flip for vector
       integer i, npts
       SAVE
 
-c     --- Zero-initialize vector potentials (safe fallback for iqmc=0) ---
+c     Zero-initialize vector potentials (safe fallback for iqmc=0)
       qv_u = 0.0d0
       qv_d = 0.0d0
       qv_s = 0.0d0
