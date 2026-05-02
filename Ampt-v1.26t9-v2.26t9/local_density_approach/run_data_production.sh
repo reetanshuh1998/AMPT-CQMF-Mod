@@ -14,13 +14,32 @@ fi
 echo "Generating authoritative model_data.csv..."
 python3 build_v2_csv.py
 
+# CQMF Mode Configuration
+# 1 = Fixed Uniform Density (Default)
+# 2 = Local Space-Time Density
+CQMF_MODE=${1:-1}
+
+if [ "$CQMF_MODE" != "1" ] && [ "$CQMF_MODE" != "2" ]; then
+    echo "ERROR: Invalid CQMF mode. Must be 1 (fixed density) or 2 (local density)."
+    echo "Usage: ./run_data_production.sh [1|2]"
+    exit 1
+fi
+
+echo "======================================================"
+if [ "$CQMF_MODE" == "1" ]; then
+    echo " Running Data Production: FIXED DENSITY MODE (iqmc=1)"
+else
+    echo " Running Data Production: LOCAL DENSITY MODE (iqmc=2)"
+fi
+echo "======================================================"
+
 # General Production Configuration
 NUM_EVENTS=2000
 
 # Array of configurations
 names=("default" "modified" "density2" "density3")
 rhos=("0.0" "1.0" "2.0" "3.0")
-iqmcs=("0" "1" "1" "1")
+iqmcs=("0" "$CQMF_MODE" "$CQMF_MODE" "$CQMF_MODE")
 
 # Clean old runs
 for name in "${names[@]}"; do
