@@ -1,0 +1,16 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t327
+#: name: Table 323
+#: description: No description provided.
+#: data_file: Table323.yaml
+#: keyword reactions: AU AU --> PHI X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 14.5
+#: CENTRALITY [pct],0.0-80.0
+#: RE,AU AU --> PHI X
+#: SQRT(S)/NUCLEON [GeV],14.5
+PT [GEV],v2,stat +,stat -,sys +,sys -
+0.769097,0.028628,0.013384,-0.013384,0.005951,-0.005951
+1.26875,0.051101,0.012527,-0.012527,0.00668,-0.00668
+2.08466,0.107791,0.031223,-0.031223,0.011139,-0.011139
+

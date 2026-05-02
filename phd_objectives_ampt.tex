@@ -1,0 +1,185 @@
+\documentclass[aspectratio=169]{beamer}
+
+\usetheme{Madrid}
+\usecolortheme{beaver}
+
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{physics}
+
+\title[PhD Objectives: AMPT \& CQMF]{Probing the High-Density QCD Phase Diagram via Chiral Mean-Fields in a Multiphase Transport Model}
+\author[Reetanshu Pandey]{Reetanshu Pandey \\ \vspace{0.2cm} \small Registration Number: 24513104 \\ \vspace{0.2cm} \small Supervisor: Dr. Suneel Dutt}
+\institute[NIT Jalandhar]{Dr. B. R. Ambedkar National Institute of Technology \\ Jalandhar, Punjab, 144008}
+\date{\today}
+
+\begin{document}
+
+% Slide 1: Title
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% Slide 2: Introduction
+\begin{frame}{Introduction: The QCD Phase Diagram \& BES}
+    \begin{itemize}
+        \item \textbf{Context:} The Beam Energy Scan (BES) program at RHIC aims to map the QCD phase diagram, specifically searching for the critical end point and the first-order phase transition boundary.
+        \item \textbf{Challenge:} At high baryon densities ($\mu_B \gg 0$, $\sqrt{s_{NN}} \sim 7.7$ GeV), traditional perturbative QCD (pQCD) models fail because non-perturbative chiral dynamics dominate.
+        \item \textbf{The Gap:} 
+        \begin{itemize}
+            \item The Chiral Quark Mean-Field (CQMF) model excellently describes the equation of state (EoS) and chiral symmetry restoration, but it lacks dynamic collision geometry.
+            \item A Multi-Phase Transport (AMPT) model perfectly handles collision dynamics and hadronic cascades but relies on vacuum partonic kinematics, lacking in-medium mean-field interactions.
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+% Slide 3: Lit Review 1 - Transport Models
+\begin{frame}{Literature Review I: Successes and Limits of Transport Models}
+    \begin{itemize}
+        \item \textbf{The Standard AMPT Model:} A Multi-Phase Transport model (Lin, Ko, et al.) has been incredibly successful at describing bulk observables at top RHIC and LHC energies via its ZPC (Zhang's Parton Cascade) and ART (A Relativistic Transport) frameworks.
+        \item \textbf{The Missing Mean-Field:} Standard AMPT relies primarily on two-body partonic scatterings governed by pQCD cross-sections. However, at lower Beam Energy Scan (BES) energies ($\sqrt{s_{NN}} \sim 7.7 - 39$ GeV), the system spends significant time in a high-baryon-density state.
+        \item \textbf{The Experimental Discrepancy:} STAR BES data (Adamczyk et al.) reveals distinct phenomena—such as the splitting of elliptic flow ($v_2$) between particles and anti-particles, and strong directed flow ($v_1$) scaling—that pure cascade models struggle to reproduce without invoking continuous, density-dependent mean-field potentials.
+    \end{itemize}
+\end{frame}
+
+% Slide 4: Lit Review 2 - Chiral EoS
+\begin{frame}{Literature Review II: Chiral Dynamics and the Equation of State}
+    \begin{itemize}
+        \item \textbf{Chiral Symmetry Restoration:} In high-density QCD matter, the spontaneous breaking of chiral symmetry is partially restored, leading to a dropping of the constituent quark mass ($m^*_q$).
+        \item \textbf{The CQMF Framework:} The Chiral Quark Mean-Field (CQMF) model (Wang, Rui, et al.) provides a rigorous theoretical mechanism to calculate this EoS. It derives the density-dependent scalar fields ($\sigma$) that reduce quark masses, and vector fields ($\omega, \rho, \phi$) that introduce flavor-dependent repulsive and attractive potentials.
+        \item \textbf{Thermodynamic Consistency:} Unlike parameterized Woods-Saxon potentials, CQMF is thermodynamically consistent and derived from a covariant Lagrangian, making it a state-of-the-art EoS for dense hadronic matter.
+    \end{itemize}
+\end{frame}
+
+% Slide 5: Lit Review 3 - The State-of-the-Art Gap
+\begin{frame}{Literature Review III: The State-of-the-Art Gap}
+    \begin{itemize}
+        \item \textbf{Previous Coupling Attempts:} Works by Ko, Song, and others have demonstrated that incorporating generalized mean-fields (e.g., NJL-type or parameterized potentials) into transport models drastically improves the description of $v_1$ and $v_2$ mass splitting.
+        \item \textbf{The Theoretical Gap:} A rigorous, event-by-event coupling of a fully solved, flavor-dependent \textit{Chiral Quark Mean-Field (CQMF)} EoS directly into the non-equilibrium partonic cascade (ZPC) of AMPT remains largely unexplored.
+        \item \textbf{The PhD Opportunity:} Most models use global static densities. Implementing a dynamic, localized density mapping $\rho(\mathbf{x},t)$ to compute real-time chiral mass shifts and vector repulsions during partonic scattering represents a significant advancement in transport theory.
+    \end{itemize}
+\end{frame}
+
+% Slide 4: Overarching PhD Goal
+\begin{frame}{Overarching PhD Goal}
+    \begin{block}{The Proposal}
+    To theoretically formulate and computationally implement a robust framework that seamlessly couples the static Chiral Quark Mean-Field (CQMF) Equation of State with the dynamic event-generator A Multi-Phase Transport (AMPT) model.
+    \end{block}
+    
+    \vspace{0.5cm}
+    We propose \textbf{three concrete objectives} to achieve this overarching goal over the course of the PhD timeline.
+\end{frame}
+
+% Slide 5: Objective 1 - Motivation
+\begin{frame}{Objective 1: Phenomenological Integration (Fixed Density Baseline)}
+    \textbf{Goal:} To incorporate CQMF-derived effective masses and vector potentials into the AMPT partonic scattering kernel.
+    \vspace{0.3cm}
+    \begin{itemize}
+        \item \textbf{Motivation:} Before attempting dynamic spatial tracking, we must first prove that modifying the canonical phase space ($s_{tot}$) and scattering cross-sections within ZPC (Zhang's Parton Cascade) is numerically stable and physically viable.
+        \item \textbf{Hypothesis:} Injecting a parameterized, uniform high-density medium into the scattering kernel will immediately resolve discrepancies in baryon stopping and particle ratios typically seen in unmodified AMPT at 7.7 GeV.
+    \end{itemize}
+\end{frame}
+
+% Slide 6: Objective 1 - Proposed Methodology
+\begin{frame}{Objective 1: Proposed Methodology}
+    \begin{itemize}
+        \item \textbf{Extraction:} Mathematically solve the CQMF gap equations across a range of target densities ($1.0\rho_0 \dots 3.0\rho_0$) to extract $(m_u^*, m_d^*, m_s^*)$ and $(V_u, V_d, V_s)$.
+        \item \textbf{Kinematic Redefinition:} We propose modifying the ZPC scattering kernel (\texttt{getht}) to replace vacuum partonic masses with $m^*(\rho)$ and shift partonic energy-momenta by the vector fields $V_q(\rho)$.
+        \item \textbf{Phase Space Splitting:} We will construct an algorithm to split the invariant scattering energy ($s_{tot}$) accounting for vector repulsion/attraction, taking special care to handle threshold constraints to preserve numerical stability.
+    \end{itemize}
+\end{frame}
+
+% Slide 7: Objective 2 - Motivation
+\begin{frame}{Objective 2: Dynamic Local Space-Time Density Mapping}
+    \textbf{Goal:} To transition from a fixed-density assumption to a fully dynamic, space-time dependent local density framework $\rho(\mathbf{x}, t)$.
+    \vspace{0.3cm}
+    \begin{itemize}
+        \item \textbf{Motivation:} In a real heavy-ion collision, density is highly heterogeneous. The core of the fireball is extremely dense, while the corona remains near vacuum.
+        \item \textbf{Hypothesis:} By mapping the spatial coordinates of partons to a 3D grid, we can accurately capture the gradients of chiral symmetry restoration, leading to accurate localized flow generation rather than artificial bulk shifts.
+    \end{itemize}
+\end{frame}
+
+% Slide 8: Objective 2 - Proposed Methodology
+\begin{frame}{Objective 2: Proposed Methodology}
+    \begin{itemize}
+        \item \textbf{Grid Construction:} We propose dividing the AMPT computational volume into a high-resolution 3D grid. Every $\Delta t$, the code will map the net quark content of each cell to determine the local baryon density.
+        \item \textbf{Lorentz Corrections:} Crucially, we will implement momentum-tracking per cell to calculate the local fluid velocity ($\vec{v}_{cell}$). This allows us to divide the lab-frame density by the Lorentz factor ($\gamma$), yielding the true \textit{proper scalar density} required by CQMF.
+        \item \textbf{Collision-Time Lookup:} When partons scatter, their spatial coordinates will be used to interpolate the exact $m^*(\mathbf{x})$ and $V(\mathbf{x})$ from the 3D grid, enabling "First-Order Mean-Field Approximations" without breaking the ZPC transport schedule.
+    \end{itemize}
+\end{frame}
+
+% Slide 9: Objective 3 - Motivation
+\begin{frame}{Objective 3: Probing Observables at BES Energies}
+    \textbf{Goal:} To systematically extract and analyze hadronic observables at $\sqrt{s_{NN}} = 7.7$ GeV using the newly developed AMPT-CQMF framework.
+    \vspace{0.3cm}
+    \begin{itemize}
+        \item \textbf{Motivation:} The ultimate test of any transport model modification is its predictive power against experimental data (STAR BES-I/II).
+        \item \textbf{The Puzzle:} Experimental data shows a distinct mass splitting in elliptic flow ($v_2$) between protons and pions/kaons at high densities, which standard AMPT struggles to reproduce without ad-hoc tuning.
+    \end{itemize}
+\end{frame}
+
+% Slide 10: Objective 3 - Proposed Methodology
+\begin{frame}{Objective 3: Proposed Methodology}
+    \begin{itemize}
+        \item \textbf{Simulation Campaigns:} We will execute high-statistics production runs ($\sim$20k events/configuration) across Vacuum, Fixed Density, and Local Density modes for Au+Au collisions at 7.7 GeV.
+        \item \textbf{Observable Extraction:}
+        \begin{itemize}
+            \item \textbf{Directed Flow ($v_1$):} To measure the strength of vector potential repulsion on net-baryon transport.
+            \item \textbf{Elliptic Flow ($v_2$):} To investigate the constituent mass splitting between light and strange quarks.
+            \item \textbf{Rapidity Spectra ($dN/dy$):} To quantify baryon stopping power near mid-rapidity.
+        \end{itemize}
+        \item \textbf{Validation:} Results will be rigorously benchmarked against published STAR experimental data to validate the phenomenological success of the framework.
+    \end{itemize}
+\end{frame}
+
+% Slide 11: Objective 4 - Motivation
+\begin{frame}{Objective 4: Feasibility Study of Pion Structure at EicC}
+    \textbf{Goal:} To establish the experimental feasibility of extracting the pion structure function ($F_2^\pi$) via the Sullivan process at the proposed Electron-Ion Collider in China (EicC).
+    \vspace{0.3cm}
+    \begin{itemize}
+        \item \textbf{Motivation:} The partonic structure of the pion (the Goldstone boson of QCD) remains poorly constrained. Historical Drell-Yan data (e.g., Fermilab E615) only probes the high-$x$ valence region, leaving the sea quark and gluon distributions largely unknown.
+        \item \textbf{The Sullivan Process:} Electron scattering off the meson cloud of the proton ($ep \rightarrow e' \pi^+ n$) provides a unique pathway to measure the pion structure at low-$x$ and high-$Q^2$.
+    \end{itemize}
+\end{frame}
+
+% Slide 12: Objective 4 - Proposed Methodology
+\begin{frame}{Objective 4: Proposed Methodology}
+    \begin{itemize}
+        \item \textbf{Monte Carlo Generation:} We will generate tagged-neutron Deep Inelastic Scattering (DIS) events at EicC kinematics ($3.5 \times 20$ GeV) using a custom C++ event generator incorporating the \texttt{piIMParton} PDF library.
+        \item \textbf{Kinematic Phase Space:} We will simulate the four-fold differential cross-section $d^4\sigma/(dx_B\, dQ^2\, dx_L\, dt)$, applying specific $x_L > 0.75$ and $|t| < 1.0$ GeV$^2$ cuts to isolate the pion pole.
+        \item \textbf{Background Rejection:} The Sullivan signal will be rigorously compared against a Pythia 8 inclusive DIS background to validate the signal-to-background separation across the crucial neutron $\eta$ and $x_L$ distributions.
+    \end{itemize}
+\end{frame}
+
+% Slide 13: Objective 5 - Motivation
+\begin{frame}{Objective 5: Extracting Kaon Structure \& the $u^K/u^\pi$ Ratio}
+    \textbf{Goal:} To extend the Sullivan process framework to Kaon exchange and extract the heavily suppressed Kaon structure function ($F_2^K$).
+    \vspace{0.3cm}
+    \begin{itemize}
+        \item \textbf{Motivation:} Kaon structure is even less understood than the pion, with only sparse experimental data available from the CERN NA3 experiment. 
+        \item \textbf{The Mass Enigma:} It is theoretically debated whether the heavier strange quark carries a larger momentum fraction than the up quark inside the kaon, and how the ratio of structure functions behaves as $x \rightarrow 1$.
+    \end{itemize}
+\end{frame}
+
+% Slide 14: Objective 5 - Proposed Methodology
+\begin{frame}{Objective 5: Proposed Methodology}
+    \begin{itemize}
+        \item \textbf{Kaon Exchange Simulation:} We will simulate $\Lambda$-tagged DIS events ($ep \rightarrow e' K^+ \Lambda$) to evaluate kaon structure at EicC.
+        \item \textbf{PDF Validation:} We will employ the Global Fit grids from the \texttt{piIMParton} model to calculate $F_2^K$ and the valence distribution $x u_v(x)$.
+        \item \textbf{Experimental Benchmarking:} The extracted theoretical distributions and the structure function ratio ($u^K / u^\pi$) will be cross-referenced against historical NA3/E615 Drell-Yan datasets to establish a rigorous framework for future global QCD analyses at EicC.
+    \end{itemize}
+\end{frame}
+
+% Slide 15: Summary and Impact
+\begin{frame}{Summary \& Expected Impact}
+    \begin{itemize}
+        \item \textbf{Heavy-Ion Dynamics:} Integrating the Chiral Quark Mean-Field (CQMF) EoS into AMPT bridges a critical gap in transport theory, providing an unprecedented dynamic description of chiral symmetry restoration at BES energies.
+        \item \textbf{Hadron Structure:} The rigorous Monte Carlo feasibility studies of the Sullivan process will directly inform the detector design and physics capabilities of the upcoming EicC facility.
+        \item \textbf{Output:} This dual-pronged theoretical and phenomenological approach is expected to yield at least 3-4 high-impact, first-author publications, forming a comprehensive and highly robust PhD thesis.
+    \end{itemize}
+    \vspace{0.5cm}
+    \begin{center}
+        \textit{Thank you for your attention.}
+    \end{center}
+\end{frame}
+
+\end{document}

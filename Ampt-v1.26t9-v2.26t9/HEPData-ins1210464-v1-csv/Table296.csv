@@ -1,0 +1,20 @@
+#: table_doi: 10.17182/hepdata.102408.v1/t296
+#: name: Table 296
+#: description: The elliptic flow,v_2, of 0–80% central Au+Au collisions as a function of the reduced transverse mass,$ m_T−m_0 $, for selected anti-particles.
+#: data_file: Data96,a.yaml
+#: keyword reactions: Au+Au
+#: keyword observables: v_2/$ m_T−m_0 $
+#: keyword cmenergies: 11.5
+#: keyword phrases: Elliptic flow | RHIC | STAR
+#: SQRT(S) [GEV],11.5
+#: Au+Au,$\overline{p}$
+#: Centrality [percentage],0-80
+$Reduced ~transverse~ mass~(GeV/C^2)$,${v_2}$,sys +,sys -,stat +,stat -,glob +,glob -
+0.315,-0.013125,0.00236,-0.001807,0.009379,-0.009379,0.000783,-0.000783
+0.495,-0.001229,0.002104,-0.004993,0.003949,-0.003949,0.000783,-0.000783
+0.705,0.018102,0.000675,-0.001502,0.003371,-0.003371,0.000783,-0.000783
+0.885,0.026888,0.00027,-0.000225,0.00355,-0.00355,0.000783,-0.000783
+1.095,0.042829,0.001308,-0.002438,0.004196,-0.004196,0.000783,-0.000783
+1.365,0.065679,0.000555,-0.001005,0.004287,-0.004287,0.000783,-0.000783
+1.755,0.087549,0.000305,-0.000482,0.007059,-0.007059,0.000783,-0.000783
+

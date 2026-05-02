@@ -1,0 +1,18 @@
+#: table_doi: 10.17182/hepdata.102408.v1/t190
+#: name: Table 182
+#: description: The elliptic flow,v_2 of $\Xi^{-}$ and $\overline{\Xi^{+}}$ as a function of the transverse momentum, p_T,for 0–80% central Au+Au collisions.
+#: data_file: Data52,b.yaml
+#: keyword reactions: Au+Au
+#: keyword observables: ∆v_2/p_T
+#: keyword cmenergies: 27
+#: keyword phrases: Elliptic flow | RHIC | STAR
+#: SQRT(S) [GEV],27
+#: Au+Au,${\Xi}{^-} - \bar{\Xi}{^+}$
+#: Centrality [percentage],0-80
+${p_T}$,$\Delta{v_2}$,sys +,sys -,stat +,stat -,glob +,glob -
+0.8295,0.0048889,0.003063,-0.005811,0.005606,-0.005606,0.0014,-0.0014
+1.0926,0.00088889,0.003135,-0.005445,0.0036,-0.0036,0.0014,-0.0014
+1.3075,0.00044444,0.002107,-0.002891,0.005061,-0.005061,0.0014,-0.0014
+1.8951,0.0053333,0.001497,-0.002447,0.003858,-0.003858,0.0014,-0.0014
+2.6685,0.0017778,0.005872,-0.005406,0.012488,-0.012488,0.0014,-0.0014
+

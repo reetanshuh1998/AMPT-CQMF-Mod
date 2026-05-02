@@ -1,0 +1,13 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t135
+#: name: Table 131
+#: description: No description provided.
+#: data_file: Table131.yaml
+#: keyword reactions: AU AU --> OMEGABAR+ X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 14.5
+#: CENTRALITY [pct],10.0-40.0
+#: RE,AU AU --> OMEGABAR+ X
+#: SQRT(S)/NUCLEON [GeV],14.5
+PT [GEV],v2
+

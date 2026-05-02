@@ -1,0 +1,16 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t191
+#: name: Table 187
+#: description: No description provided.
+#: data_file: Table187.yaml
+#: keyword reactions: AU AU --> OMEGABAR+ X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 62.4
+#: CENTRALITY [pct],10.0-40.0
+#: RE,AU AU --> OMEGABAR+ X
+#: SQRT(S)/NUCLEON [GeV],62.4
+PT [GEV],v2,stat +,stat -,sys +,sys -
+1.3245,0.046621,0.023363,-0.023363,0.027857,-0.013154
+1.9585,0.103721,0.018291,-0.018291,0.00869,-0.008079
+2.7235,0.189685,0.029776,-0.029776,0.017985,-0.012888
+

@@ -1,0 +1,13 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t134
+#: name: Table 130
+#: description: No description provided.
+#: data_file: Table130.yaml
+#: keyword reactions: AU AU --> OMEGA- X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 14.5
+#: CENTRALITY [pct],10.0-40.0
+#: RE,AU AU --> OMEGA- X
+#: SQRT(S)/NUCLEON [GeV],14.5
+PT [GEV],v2
+

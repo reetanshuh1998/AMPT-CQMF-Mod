@@ -1,0 +1,19 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t342
+#: name: Table 338
+#: description: No description provided.
+#: data_file: Table338.yaml
+#: keyword reactions: AU AU --> XI- X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 19.6
+#: CENTRALITY [pct],0.0-80.0
+#: RE,AU AU --> XI- X
+#: SQRT(S)/NUCLEON [GeV],19.6
+PT [GEV],v2,stat +,stat -,sys +,sys -
+0.8295,0.035831,0.007777,-0.007777,0.002476,-0.003352
+1.2025,0.060857,0.005229,-0.005229,0.002142,-0.002381
+1.5045,0.082892,0.007486,-0.007486,0.003897,-0.003109
+1.7855,0.100022,0.00637,-0.00637,0.003826,-0.003845
+2.2365,0.120116,0.00886,-0.00886,0.004595,-0.002657
+2.8455,0.138729,0.019338,-0.019338,0.013814,-0.008993
+

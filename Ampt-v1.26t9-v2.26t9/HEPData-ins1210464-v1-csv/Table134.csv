@@ -1,0 +1,20 @@
+#: table_doi: 10.17182/hepdata.102408.v1/t142
+#: name: Table 134
+#: description: The elliptic flow, v_2, of charged kaons as a function of the transverse momentum,p_T,for 0–80% central Au+Au collisions.
+#: data_file: Data31,b.yaml
+#: keyword reactions: Au+Au
+#: keyword observables: v_2/p_T
+#: keyword cmenergies: 7.7
+#: keyword phrases: Elliptic flow | RHIC | STAR
+#: SQRT(S) [GEV],7.7
+#: Au+Au,${K^0_s}$
+#: Centrality [percentage],0-80
+${p_T}$,${v_2}$,sys +,sys -,stat +,stat -,glob +,glob -
+0.3055,0.000804,0.000236,-0.000238,0.007605,-0.007605,0.001257,-0.001257
+0.5045,0.022038,0.000189,-0.000191,0.004773,-0.004773,0.001257,-0.001257
+0.7055,0.033242,0.000312,-0.000306,0.004259,-0.004259,0.001257,-0.001257
+0.9055,0.054015,0.000127,-0.000123,0.004752,-0.004752,0.001257,-0.001257
+1.1045,0.055763,0.000476,-0.000487,0.006078,-0.006078,0.001257,-0.001257
+1.3635,0.067478,0.00173,-0.001809,0.0069,-0.0069,0.001257,-0.001257
+1.8275,0.066942,0.000785,-0.00083,0.013819,-0.013819,0.001257,-0.001257
+

@@ -1,0 +1,18 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t159
+#: name: Table 155
+#: description: No description provided.
+#: data_file: Table155.yaml
+#: keyword reactions: AU AU --> PHI X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 27.0
+#: CENTRALITY [pct],10.0-40.0
+#: RE,AU AU --> PHI X
+#: SQRT(S)/NUCLEON [GeV],27.0
+PT [GEV],v2,stat +,stat -,sys +,sys -
+0.6505,0.020167,0.005827,-0.005827,0.002041,-0.002387
+0.9995,0.048669,0.004144,-0.004144,0.00189,-0.004152
+1.3765,0.086916,0.005136,-0.005136,0.005481,-0.004397
+1.8445,0.097872,0.006692,-0.006692,0.004024,-0.005012
+2.4725,0.116611,0.012293,-0.012293,0.004451,-0.005452
+

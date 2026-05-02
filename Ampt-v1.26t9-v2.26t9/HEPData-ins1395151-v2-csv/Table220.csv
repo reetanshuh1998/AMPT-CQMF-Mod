@@ -1,0 +1,18 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t224
+#: name: Table 220
+#: description: No description provided.
+#: data_file: Table220.yaml
+#: keyword reactions: AU AU --> PBAR X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 11.5
+#: CENTRALITY [pct],40.0-80.0
+#: RE,AU AU --> PBAR X
+#: SQRT(S)/NUCLEON [GeV],11.5
+PT [GEV],v2,stat +,stat -,sys +,sys -
+0.465,0.007215,0.010481,-0.010481,0.004768,-0.011268
+0.705,0.035743,0.010674,-0.010674,0.005087,-0.002315
+0.885,0.063511,0.012207,-0.012207,0.000601,-0.000653
+1.155,0.090456,0.012565,-0.012565,0.004626,-0.008463
+1.635,0.187519,0.020504,-0.020504,0.004331,-0.002399
+

@@ -1,0 +1,16 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t109
+#: name: Table 105
+#: description: No description provided.
+#: data_file: Table105.yaml
+#: keyword reactions: AU AU --> LAMBDABAR X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation | Strange production
+#: keyword cmenergies: 7.7
+#: CENTRALITY [pct],10.0-40.0
+#: RE,AU AU --> LAMBDABAR X
+#: SQRT(S)/NUCLEON [GeV],7.7
+PT [GEV],v2,stat +,stat -,sys +,sys -
+0.6415,-0.000923,0.027309,-0.027309,0.007271,-0.006056
+1.0755,0.02956,0.017465,-0.017465,0.004953,-0.004896
+1.6655,0.052301,0.029772,-0.029772,0.005257,-0.005557
+

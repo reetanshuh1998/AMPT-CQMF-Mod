@@ -1,0 +1,17 @@
+#: table_doi: 10.17182/hepdata.102408.v1/t215
+#: name: Table 207
+#: description: The elliptic flow, v_2, of p and $\overline{p}$ as a function of the transverse momentum, p_T, for 0–10% central Au+Au collisions.
+#: data_file: Data68,b.yaml
+#: keyword reactions: Au+Au
+#: keyword observables: ∆v_2/p_T
+#: keyword cmenergies: 11.5
+#: keyword phrases: Elliptic flow | RHIC | STAR
+#: SQRT(S) [GEV],11.5
+#: Au+Au,${p} - \overline{p}$
+#: Centrality [percentage],0-10
+${p_T}$,$\Delta{v_2}$,sys +,sys -,stat +,stat -,glob +,glob -
+0.4275,0.0096154,0.001659,-0.002329,0.00789,-0.00789,0.000956,-0.000956
+0.7586,0.010256,0.001837,-0.004283,0.004981,-0.004981,0.000956,-0.000956
+1.1862,0.016026,0.000369,-0.000253,0.005819,-0.005819,0.000956,-0.000956
+1.7517,0.017949,0.000547,-0.000278,0.01139,-0.01139,0.000956,-0.000956
+

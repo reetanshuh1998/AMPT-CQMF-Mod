@@ -1,0 +1,18 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t343
+#: name: Table 339
+#: description: No description provided.
+#: data_file: Table339.yaml
+#: keyword reactions: AU AU --> XIBAR+ X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 19.6
+#: CENTRALITY [pct],0.0-80.0
+#: RE,AU AU --> XIBAR+ X
+#: SQRT(S)/NUCLEON [GeV],19.6
+PT [GEV],v2,stat +,stat -,sys +,sys -
+0.8315,0.033729,0.013085,-0.013085,0.007351,-0.007812
+1.2045,0.050957,0.009215,-0.009215,0.004575,-0.005082
+1.5925,0.069349,0.009799,-0.009799,0.005106,-0.006596
+2.0445,0.088494,0.012096,-0.012096,0.005252,-0.003425
+2.6585,0.106157,0.024583,-0.024583,0.01179,-0.013306
+

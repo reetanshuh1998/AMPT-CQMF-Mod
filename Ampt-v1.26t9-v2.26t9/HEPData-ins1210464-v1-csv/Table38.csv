@@ -1,0 +1,18 @@
+#: table_doi: 10.17182/hepdata.102408.v1/t38
+#: name: Table 38
+#: description: The elliptic flow, v_2 (p_T), in 0–80% central Au+Au collisions for selected particles re plotted only for the transverse momentum range of 0.2< pT<1.6 GeV/c to emphasize the mass ordering at low p__T.
+#: data_file: Data13,b.yaml
+#: keyword reactions: Au+Au
+#: keyword observables: v_2/p_T
+#: keyword cmenergies: 7.7
+#: keyword phrases: Elliptic flow | RHIC | STAR
+#: SQRT(S) [GEV],7.7
+#: Au+Au,$K^+$
+#: Centrality [percentage],0-80
+$p_T$,$v_2$,sys +,sys -,stat +,stat -,glob +,glob -
+0.315,0.010691,5.5e-05,-0.000111,0.002808,-0.002808,0.00195,-0.00195
+0.495,0.026393,1.8e-05,-1.1e-05,0.001822,-0.001822,0.00195,-0.00195
+0.705,0.039799,4.1e-05,-2.9e-05,0.00191,-0.00191,0.00195,-0.00195
+0.885,0.053788,7.5e-05,-5.8e-05,0.002362,-0.002362,0.00195,-0.00195
+1.155,0.062288,2.2e-05,-1.4e-05,0.002557,-0.002557,0.00195,-0.00195
+

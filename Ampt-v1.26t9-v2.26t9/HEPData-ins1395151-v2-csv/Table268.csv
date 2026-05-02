@@ -1,0 +1,18 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t272
+#: name: Table 268
+#: description: No description provided.
+#: data_file: Table268.yaml
+#: keyword reactions: AU AU --> XI- X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 39.0
+#: CENTRALITY [pct],40.0-80.0
+#: RE,AU AU --> XI- X
+#: SQRT(S)/NUCLEON [GeV],39.0
+PT [GEV],v2,stat +,stat -,sys +,sys -
+0.8235,0.071707,0.009975,-0.009975,0.003162,-0.00372
+1.2005,0.096375,0.007618,-0.007618,0.003191,-0.003004
+1.5905,0.133595,0.008759,-0.008759,0.003329,-0.004465
+1.9835,0.193604,0.01232,-0.01232,0.007903,-0.003265
+2.4785,0.23788,0.016207,-0.016207,0.006694,-0.007355
+

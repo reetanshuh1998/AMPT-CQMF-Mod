@@ -1,0 +1,16 @@
+#: table_doi: 10.17182/hepdata.102408.v1/t334
+#: name: Table 342
+#: description: The difference in the v_2 values between a particle X and its corresponding anti-particle $\overline{X}$ as a function of √sNN for 0–80% central Au+Au collisions.
+#: data_file: Data86,c.yaml
+#: keyword reactions: Au+Au
+#: keyword phrases: Elliptic flow | RHIC | STAR
+#: Au+Au,${\Lambda} - {\bar{\Lambda}}$
+#: Centrality [percentage],0-80
+$\sqrt{s_{NN}}$,${v_2}(X)-{v_2}(\bar{X})$,stat +,stat -
+7.7,0.035711,0.004806,-0.004806
+11.5,0.018775,0.003021,-0.003021
+19.6,0.011422,0.002544,-0.002544
+27,0.009453,0.002499,-0.002499
+39,0.0065646,0.002752,-0.002752
+62.4,0.0043326,0.003223,-0.003223
+

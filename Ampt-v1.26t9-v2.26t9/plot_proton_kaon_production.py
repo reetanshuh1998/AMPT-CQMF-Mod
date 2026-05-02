@@ -57,10 +57,9 @@ def parse_ampt(filename):
 
 # ---- Configuration ----
 files = {
-    'Default':               'ana_highstats/ampt_default.dat',
-    r'Mod ($\rho_0$)':       'ana_highstats/ampt_modified.dat',
-    r'Mod ($2\rho_0$)':      'ana_highstats/ampt_density2.dat',
-    r'Mod ($3\rho_0$)':      'ana_highstats/ampt_density3.dat',
+    'Default': "ana/ampt_default.dat",
+    'Fixed Density ($1\rho_0$)': "ana/ampt_modified.dat",
+    'Local Density (Phase 1)': "ana/ampt_localdensity.dat"
 }
 colors = ['royalblue', 'darkorange', 'forestgreen', 'firebrick']
 

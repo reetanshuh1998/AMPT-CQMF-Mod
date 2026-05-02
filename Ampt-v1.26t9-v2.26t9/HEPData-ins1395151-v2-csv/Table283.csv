@@ -1,0 +1,18 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t287
+#: name: Table 283
+#: description: No description provided.
+#: data_file: Table283.yaml
+#: keyword reactions: AU AU --> XIBAR+ X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 62.4
+#: CENTRALITY [pct],40.0-80.0
+#: RE,AU AU --> XIBAR+ X
+#: SQRT(S)/NUCLEON [GeV],62.4
+PT [GEV],v2,stat +,stat -,sys +,sys -
+0.8255,0.082296,0.015258,-0.015258,0.005943,-0.005807
+1.2025,0.080678,0.011457,-0.011457,0.003769,-0.005094
+1.5935,0.132025,0.01265,-0.01265,0.004884,-0.006681
+1.9855,0.207255,0.017006,-0.017006,0.005311,-0.02248
+2.4865,0.198324,0.021531,-0.021531,0.0159,-0.01347
+

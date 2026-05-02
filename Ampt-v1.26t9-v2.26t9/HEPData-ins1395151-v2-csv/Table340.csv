@@ -1,0 +1,15 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t344
+#: name: Table 340
+#: description: No description provided.
+#: data_file: Table340.yaml
+#: keyword reactions: AU AU --> OMEGA- X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 19.6
+#: CENTRALITY [pct],0.0-80.0
+#: RE,AU AU --> OMEGA- X
+#: SQRT(S)/NUCLEON [GeV],19.6
+PT [GEV],v2,stat +,stat -,sys +,sys -
+1.4155,0.027841,0.033797,-0.033797,0.015996,-0.021258
+2.1905,0.050858,0.039866,-0.039866,0.014723,-0.010638
+

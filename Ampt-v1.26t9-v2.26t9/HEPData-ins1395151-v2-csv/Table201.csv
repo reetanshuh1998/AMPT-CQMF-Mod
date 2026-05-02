@@ -1,0 +1,14 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t205
+#: name: Table 201
+#: description: No description provided.
+#: data_file: Table201.yaml
+#: keyword reactions: AU AU --> OMEGABAR+ X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 7.7
+#: CENTRALITY [pct],40.0-80.0
+#: RE,AU AU --> OMEGABAR+ X
+#: SQRT(S)/NUCLEON [GeV],7.7
+PT [GEV],v2,stat +,stat -,sys +,sys -
+1.4025,0.096938,0.297654,-0.297654,2.346234,-5.270535
+

@@ -1,0 +1,16 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t259
+#: name: Table 255
+#: description: No description provided.
+#: data_file: Table255.yaml
+#: keyword reactions: AU AU --> XIBAR+ X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 27.0
+#: CENTRALITY [pct],40.0-80.0
+#: RE,AU AU --> XIBAR+ X
+#: SQRT(S)/NUCLEON [GeV],27.0
+PT [GEV],v2,stat +,stat -,sys +,sys -
+0.9495,0.074644,0.016233,-0.016233,0.006314,-0.01151
+1.4665,0.14836,0.015835,-0.015835,0.005973,-0.015053
+2.1105,0.160042,0.026097,-0.026097,0.018477,-0.014648
+

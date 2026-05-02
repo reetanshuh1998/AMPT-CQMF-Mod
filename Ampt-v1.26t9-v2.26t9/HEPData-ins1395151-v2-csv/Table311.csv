@@ -1,0 +1,15 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t315
+#: name: Table 311
+#: description: No description provided.
+#: data_file: Table311.yaml
+#: keyword reactions: AU AU --> XIBAR+ X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 11.5
+#: CENTRALITY [pct],0.0-80.0
+#: RE,AU AU --> XIBAR+ X
+#: SQRT(S)/NUCLEON [GeV],11.5
+PT [GEV],v2,stat +,stat -,sys +,sys -
+1.0815,0.008404,0.023386,-0.023386,0.009872,-0.006364
+1.7965,0.02685,0.024894,-0.024894,0.010942,-0.014444
+

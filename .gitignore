@@ -7,3 +7,13 @@
 **/ana/*.dat
 **/ana/*.log
 **/*.log
+**/ana*/*.dat
+**/run*/
+**/star_data/
+*.tar.gz
+*.aux
+*.nav
+*.out
+*.snm
+*.toc
+__pycache__/

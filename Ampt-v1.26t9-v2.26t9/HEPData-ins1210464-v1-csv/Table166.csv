@@ -1,0 +1,18 @@
+#: table_doi: 10.17182/hepdata.102408.v1/t174
+#: name: Table 166
+#: description: The elliptic flow,v_2 of $\Lambda$ and $\overline{\Lambda}$ as a function of the transverse momentum, p_T,for 0–80% central Au+Au. collisions.
+#: data_file: Data44,b.yaml
+#: keyword reactions: Au+Au
+#: keyword observables: ∆v_2/p_T
+#: keyword cmenergies: 11.5
+#: keyword phrases: Elliptic flow | RHIC | STAR
+#: SQRT(S) [GEV],11.5
+#: Au+Au,${\Lambda} - \bar{\Lambda}$
+#: Centrality [percentage],0-80
+${p_T}$,$\Delta{v_2}$,sys +,sys -,stat +,stat -,glob +,glob -
+0.6445,0.008427,0.004359,-0.002378,0.008106,-0.008106,0.000695,-0.000695
+0.9055,0.018539,0.001754,-0.004353,0.008282,-0.008282,0.000695,-0.000695
+1.1885,0.017416,0.000948,-0.002082,0.006241,-0.006241,0.000695,-0.000695
+1.5805,0.021348,0.002616,-0.003046,0.008843,-0.008843,0.000695,-0.000695
+2.0745,0.012921,0.003534,-0.002502,0.013208,-0.013208,0.000695,-0.000695
+

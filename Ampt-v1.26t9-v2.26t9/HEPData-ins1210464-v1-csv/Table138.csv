@@ -1,0 +1,22 @@
+#: table_doi: 10.17182/hepdata.102408.v1/t146
+#: name: Table 138
+#: description: The elliptic flow, v_2, of charged kaons as a function of the transverse momentum,p_T,for 0–80% central Au+Au collisions. Different ∆v_2 ranges were used for the upper and lower panels.
+#: data_file: Data32,c.yaml
+#: keyword reactions: Au+Au
+#: keyword observables: ∆v_2/p_T
+#: keyword cmenergies: 11.5
+#: keyword phrases: Elliptic flow | RHIC | STAR
+#: SQRT(S) [GEV],11.5
+#: Au+Au,$K{^+}-K{^-}$
+#: Centrality [percentage],0-80
+${p_T}$,$\Delta{v_2}$,sys +,sys -,stat +,stat -,glob +,glob -
+0.315,0.0074389,4.3e-05,-2.1e-05,0.001233,-0.001233,0.000885,-0.000885
+0.495,0.0076481,6.5e-05,-3.7e-05,0.000793,-0.000793,0.000885,-0.000885
+0.705,0.0078508,0.000142,-8.8e-05,0.000821,-0.000821,0.000885,-0.000885
+0.885,0.0062399,0.00012,-7.7e-05,0.000996,-0.000996,0.000885,-0.000885
+1.095,0.005988,8.9e-05,-4.4e-05,0.001302,-0.001302,0.000885,-0.000885
+1.275,0.0057394,2.8e-05,-1.4e-05,0.001746,-0.001746,0.000885,-0.000885
+1.485,0.0048055,0.00017,-0.000207,0.002423,-0.002423,0.000885,-0.000885
+1.665,0.0027417,7.9e-05,-3.6e-05,0.003437,-0.003437,0.000885,-0.000885
+2.325,0.0028935,0.003642,-0.004604,0.010179,-0.010179,0.000885,-0.000885
+

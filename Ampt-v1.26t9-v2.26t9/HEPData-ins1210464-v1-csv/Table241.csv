@@ -1,0 +1,19 @@
+#: table_doi: 10.17182/hepdata.102408.v1/t249
+#: name: Table 241
+#: description: The elliptic flow,v_2, of 0–80% central Au+Au collisions as a function of the reduced transverse mass,$ m_T−m_0 $, for selected particles.
+#: data_file: Data89,b.yaml
+#: keyword reactions: Au+Au
+#: keyword observables: v_2/$ m_T−m_0 $
+#: keyword cmenergies: 7.7
+#: keyword phrases: Elliptic flow | RHIC | STAR
+#: SQRT(S) [GEV],7.7
+#: Au+Au,$\Lambda$
+#: Centrality [percentage],0-80
+$Reduced ~transverse~ mass~(GeV/C^2)$,${v_2}$,sys +,sys -,stat +,stat -,glob +,glob -
+0.4935,0.014368,0.008664,-0.003408,0.008664,-0.008664,0.001947,-0.001947
+0.7055,0.035005,0.005366,-0.001175,0.005366,-0.005366,0.001947,-0.001947
+0.9045,0.04651,0.004566,-0.001177,0.004566,-0.004566,0.001947,-0.001947
+1.1055,0.063858,0.004674,-0.001487,0.004674,-0.004674,0.001947,-0.001947
+1.2955,0.066239,0.005312,-0.000894,0.005312,-0.005312,0.001947,-0.001947
+1.6335,0.07229,0.004694,-0.001497,0.004694,-0.004694,0.001947,-0.001947
+

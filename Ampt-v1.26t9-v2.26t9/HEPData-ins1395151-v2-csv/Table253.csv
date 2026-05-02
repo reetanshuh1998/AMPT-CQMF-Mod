@@ -1,0 +1,16 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t257
+#: name: Table 253
+#: description: No description provided.
+#: data_file: Table253.yaml
+#: keyword reactions: AU AU --> PHI X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 27.0
+#: CENTRALITY [pct],40.0-80.0
+#: RE,AU AU --> PHI X
+#: SQRT(S)/NUCLEON [GeV],27.0
+PT [GEV],v2,stat +,stat -,sys +,sys -
+0.7585,0.046072,0.007934,-0.007934,0.002661,-0.002893
+1.2415,0.098439,0.008602,-0.008602,0.003338,-0.002478
+1.9135,0.127231,0.015426,-0.015426,0.001372,-0.001757
+

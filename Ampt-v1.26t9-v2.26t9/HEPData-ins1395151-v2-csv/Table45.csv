@@ -1,0 +1,16 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t49
+#: name: Table 45
+#: description: No description provided.
+#: data_file: Table45.yaml
+#: keyword reactions: AU AU --> XIBAR+ X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 19.6
+#: CENTRALITY [pct],0.0-10.0
+#: RE,AU AU --> XIBAR+ X
+#: SQRT(S)/NUCLEON [GeV],19.6
+PT [GEV],v2,stat +,stat -,sys +,sys -
+0.9775,-0.013145,0.021423,-0.021423,0.008747,-0.007686
+1.5535,0.026192,0.014444,-0.014444,0.006841,-0.008615
+2.3075,0.017312,0.027483,-0.027483,0.0113,-0.013764
+

@@ -33,10 +33,9 @@ def extract_pt_data(filename, target_pids):
     return np.array(pt_list), max(1, num_events)
 
 files = {
-    'Default': "ana_highstats/ampt_default.dat",
-    'Mod ($\u03c1_0$)': "ana_highstats/ampt_modified.dat",
-    'Mod (2$\u03c1_0$)': "ana_highstats/ampt_density2.dat",
-    'Mod (3$\u03c1_0$)': "ana_highstats/ampt_density3.dat"
+    'Default': "ana/ampt_default.dat",
+    'Fixed Density ($1\rho_0$)': "ana/ampt_modified.dat",
+    'Local Density (Phase 1)': "ana/ampt_localdensity.dat"
 }
 colors = ['royalblue', 'darkorange', 'forestgreen', 'firebrick']
 

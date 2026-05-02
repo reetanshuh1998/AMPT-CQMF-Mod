@@ -1,0 +1,21 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t312
+#: name: Table 308
+#: description: No description provided.
+#: data_file: Table308.yaml
+#: keyword reactions: AU AU --> K+ X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation | Strange production
+#: keyword cmenergies: 7.7
+#: CENTRALITY [pct],0.0-80.0
+#: RE,AU AU --> K+ X
+#: SQRT(S)/NUCLEON [GeV],7.7
+PT [GEV],v2,stat +,stat -,sys +,sys -
+0.315,0.010691,0.002808,-0.002808,5.5e-05,-0.000111
+0.495,0.026393,0.001822,-0.001822,1.8e-05,-1.1e-05
+0.705,0.039799,0.00191,-0.00191,4.1e-05,-2.9e-05
+0.885,0.053788,0.002362,-0.002362,7.5e-05,-5.8e-05
+1.155,0.062288,0.002557,-0.002557,2.2e-05,-1.4e-05
+1.545,0.076543,0.005106,-0.005106,0.00028,-0.000479
+1.935,0.077197,0.01125,-0.01125,0.001899,-0.001915
+2.325,0.052976,0.0305,-0.0305,0.007062,-0.004517
+

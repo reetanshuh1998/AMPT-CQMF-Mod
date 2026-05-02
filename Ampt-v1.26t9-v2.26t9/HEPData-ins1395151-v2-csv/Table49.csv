@@ -1,0 +1,20 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t53
+#: name: Table 49
+#: description: No description provided.
+#: data_file: Table49.yaml
+#: keyword reactions: AU AU --> LAMBDABAR X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation | Strange production
+#: keyword cmenergies: 19.6
+#: CENTRALITY [pct],0.0-10.0
+#: RE,AU AU --> LAMBDABAR X
+#: SQRT(S)/NUCLEON [GeV],19.6
+PT [GEV],v2,stat +,stat -,sys +,sys -
+0.6495,0.003039,0.005833,-0.005833,0.00173,-0.001778
+0.9045,0.013199,0.005412,-0.005412,0.001572,-0.002958
+1.1055,0.02495,0.005171,-0.005171,0.002589,-0.001538
+1.2955,0.027441,0.005529,-0.005529,0.001878,-0.00163
+1.5845,0.047087,0.00492,-0.00492,0.000679,-0.00163
+2.0305,0.053172,0.00717,-0.00717,0.002454,-0.002638
+2.6365,0.076239,0.017218,-0.017218,0.006855,-0.007132
+

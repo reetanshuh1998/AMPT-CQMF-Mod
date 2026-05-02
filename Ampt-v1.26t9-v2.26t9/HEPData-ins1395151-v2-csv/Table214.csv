@@ -1,0 +1,14 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t218
+#: name: Table 214
+#: description: No description provided.
+#: data_file: Table214.yaml
+#: keyword reactions: AU AU --> OMEGA- X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 11.5
+#: CENTRALITY [pct],40.0-80.0
+#: RE,AU AU --> OMEGA- X
+#: SQRT(S)/NUCLEON [GeV],11.5
+PT [GEV],v2,stat +,stat -,sys +,sys -
+1.5505,-0.130965,0.259382,-0.259382,1.078911,-1.055514
+

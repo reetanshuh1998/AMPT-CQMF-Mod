@@ -1,0 +1,18 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t357
+#: name: Table 353
+#: description: No description provided.
+#: data_file: Table353.yaml
+#: keyword reactions: AU AU --> XIBAR+ X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 27.0
+#: CENTRALITY [pct],0.0-80.0
+#: RE,AU AU --> XIBAR+ X
+#: SQRT(S)/NUCLEON [GeV],27.0
+PT [GEV],v2,stat +,stat -,sys +,sys -
+0.8315,0.023155,0.008082,-0.008082,0.003981,-0.005636
+1.1055,0.054887,0.008184,-0.008184,0.002809,-0.004755
+1.3955,0.074189,0.005535,-0.005535,0.001724,-0.002527
+1.9065,0.101518,0.005459,-0.005459,0.0022,-0.002999
+2.6705,0.13948,0.013855,-0.013855,0.004491,-0.003965
+

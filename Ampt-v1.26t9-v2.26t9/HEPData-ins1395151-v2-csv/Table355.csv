@@ -1,0 +1,15 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t359
+#: name: Table 355
+#: description: No description provided.
+#: data_file: Table355.yaml
+#: keyword reactions: AU AU --> OMEGABAR+ X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 27.0
+#: CENTRALITY [pct],0.0-80.0
+#: RE,AU AU --> OMEGABAR+ X
+#: SQRT(S)/NUCLEON [GeV],27.0
+PT [GEV],v2,stat +,stat -,sys +,sys -
+1.5285,0.049831,0.02217,-0.02217,0.008914,-0.018838
+2.3635,0.105527,0.032294,-0.032294,0.024968,-0.021257
+

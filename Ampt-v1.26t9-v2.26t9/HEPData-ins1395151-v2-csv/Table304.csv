@@ -1,0 +1,17 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t308
+#: name: Table 304
+#: description: No description provided.
+#: data_file: Table304.yaml
+#: keyword reactions: AU AU --> PBAR X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 7.7
+#: CENTRALITY [pct],0.0-80.0
+#: RE,AU AU --> PBAR X
+#: SQRT(S)/NUCLEON [GeV],7.7
+PT [GEV],v2,stat +,stat -,sys +,sys -
+0.465,0.006861,0.014133,-0.014133,0.001106,-0.002283
+0.795,0.010907,0.009718,-0.009718,0.000675,-0.001098
+1.155,0.013132,0.013879,-0.013879,0.002946,-0.004448
+1.635,0.063715,0.020591,-0.020591,0.003983,-0.002382
+

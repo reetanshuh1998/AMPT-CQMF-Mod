@@ -1,0 +1,15 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t93
+#: name: Table 89
+#: description: No description provided.
+#: data_file: Table89.yaml
+#: keyword reactions: AU AU --> OMEGABAR+ X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 62.4
+#: CENTRALITY [pct],0.0-10.0
+#: RE,AU AU --> OMEGABAR+ X
+#: SQRT(S)/NUCLEON [GeV],62.4
+PT [GEV],v2,stat +,stat -,sys +,sys -
+1.5825,0.074856,0.04169,-0.04169,0.02472,-0.022707
+2.4165,0.037826,0.046051,-0.046051,0.021663,-0.020283
+

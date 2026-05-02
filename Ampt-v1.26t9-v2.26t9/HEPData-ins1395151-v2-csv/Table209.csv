@@ -1,0 +1,19 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t213
+#: name: Table 209
+#: description: No description provided.
+#: data_file: Table209.yaml
+#: keyword reactions: AU AU --> K- X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation | Strange production
+#: keyword cmenergies: 7.7
+#: CENTRALITY [pct],40.0-80.0
+#: RE,AU AU --> K- X
+#: SQRT(S)/NUCLEON [GeV],7.7
+PT [GEV],v2,stat +,stat -,sys +,sys -
+0.315,0.017888,0.016186,-0.016186,0.000964,-0.001926
+0.495,0.028184,0.011455,-0.011455,0.000175,-0.000106
+0.675,0.05803,0.013066,-0.013066,0.000333,-0.000286
+0.885,0.093357,0.017444,-0.017444,0.000323,-0.00017
+1.155,0.090288,0.020302,-0.020302,0.002104,-0.004165
+1.545,0.185715,0.045604,-0.045604,0.001663,-0.001191
+

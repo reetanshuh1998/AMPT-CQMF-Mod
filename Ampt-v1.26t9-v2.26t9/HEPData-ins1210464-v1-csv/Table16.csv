@@ -1,0 +1,19 @@
+#: table_doi: 10.17182/hepdata.102408.v1/t16
+#: name: Table 16
+#: description: The elliptic flow,v_2, as a function of the transverse momentum,p_T, from 0–80% central Au+Au collisions for various particle species and energies.
+#: data_file: Data6.yaml
+#: keyword reactions: Au+Au
+#: keyword observables: v_2/p_T
+#: keyword cmenergies: 27
+#: keyword phrases: Elliptic flow | RHIC | STAR
+#: SQRT(S) [GEV],27
+#: Au+Au,${\phi}$
+#: Centrality [percentage],0-80
+$p_T$,$v_2$,sys +,sys -,stat +,stat -,glob +,glob -
+0.6515,0.022027,0.00256,-0.003334,0.005854,-0.005854,0.002045,-0.002045
+0.9985,0.046974,0.001666,-0.003722,0.004246,-0.004246,0.002045,-0.002045
+1.3765,0.061347,0.002849,-0.002584,0.005393,-0.005393,0.002045,-0.002045
+1.7825,0.084116,0.00151,-0.001967,0.008059,-0.008059,0.002045,-0.002045
+2.2735,0.087974,0.00445,-0.005517,0.010424,-0.010424,0.002045,-0.002045
+3.1485,0.099889,0.006877,-0.007288,0.028092,-0.028092,0.002045,-0.002045
+

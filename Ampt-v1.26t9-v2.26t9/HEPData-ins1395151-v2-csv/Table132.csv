@@ -1,0 +1,21 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t136
+#: name: Table 132
+#: description: No description provided.
+#: data_file: Table132.yaml
+#: keyword reactions: AU AU --> LAMBDA X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation | Strange production
+#: keyword cmenergies: 14.5
+#: CENTRALITY [pct],10.0-40.0
+#: RE,AU AU --> LAMBDA X
+#: SQRT(S)/NUCLEON [GeV],14.5
+PT [GEV],v2,stat +,stat -,sys +,sys -
+0.607004,0.025892,0.00437,-0.00437,0.001318,-0.001318
+0.814907,0.051727,0.002685,-0.002685,0.002277,-0.002277
+1.04706,0.070777,0.001848,-0.001848,0.000133,-0.000133
+1.33928,0.099128,0.002087,-0.002087,0.000254,-0.000254
+1.63391,0.121835,0.002739,-0.002739,0.000395,-0.000395
+1.96409,0.155916,0.003677,-0.003677,0.000703,-0.000703
+2.361,0.178196,0.006759,-0.006759,0.00044,-0.00044
+2.83885,0.188553,0.011708,-0.011708,0.003746,-0.003746
+

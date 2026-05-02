@@ -1,0 +1,19 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t211
+#: name: Table 207
+#: description: No description provided.
+#: data_file: Table207.yaml
+#: keyword reactions: AU AU --> PI- X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 7.7
+#: CENTRALITY [pct],40.0-80.0
+#: RE,AU AU --> PI- X
+#: SQRT(S)/NUCLEON [GeV],7.7
+PT [GEV],v2,stat +,stat -,sys +,sys -
+0.285,0.025794,0.001773,-0.001773,0.0,-0.0
+0.495,0.051351,0.002356,-0.002356,0.000288,-0.000144
+0.675,0.072829,0.003459,-0.003459,0.000655,-0.001327
+0.885,0.08952,0.005325,-0.005325,3.6e-05,-2.2e-05
+1.125,0.110976,0.007036,-0.007036,5.7e-05,-2.9e-05
+1.545,0.100925,0.017454,-0.017454,0.000267,-0.000484
+

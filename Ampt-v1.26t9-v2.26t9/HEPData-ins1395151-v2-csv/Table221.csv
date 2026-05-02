@@ -1,0 +1,21 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t225
+#: name: Table 221
+#: description: No description provided.
+#: data_file: Table221.yaml
+#: keyword reactions: AU AU --> PI- X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 11.5
+#: CENTRALITY [pct],40.0-80.0
+#: RE,AU AU --> PI- X
+#: SQRT(S)/NUCLEON [GeV],11.5
+PT [GEV],v2,stat +,stat -,sys +,sys -
+0.285,0.028152,0.000793,-0.000793,0.0,-0.0
+0.495,0.051096,0.001028,-0.001028,0.000103,-5.2e-05
+0.675,0.07519,0.001479,-0.001479,6.7e-05,-0.000109
+0.885,0.09996,0.002221,-0.002221,3e-06,-5e-06
+1.065,0.121391,0.003359,-0.003359,0.000327,-0.00033
+1.275,0.133577,0.00508,-0.00508,6.4e-05,-6.1e-05
+1.545,0.142167,0.006446,-0.006446,0.000668,-0.000618
+1.935,0.166879,0.014605,-0.014605,0.000795,-0.000406
+

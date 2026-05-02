@@ -1,0 +1,16 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t190
+#: name: Table 186
+#: description: No description provided.
+#: data_file: Table186.yaml
+#: keyword reactions: AU AU --> OMEGA- X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 62.4
+#: CENTRALITY [pct],10.0-40.0
+#: RE,AU AU --> OMEGA- X
+#: SQRT(S)/NUCLEON [GeV],62.4
+PT [GEV],v2,stat +,stat -,sys +,sys -
+1.3205,0.090104,0.021553,-0.021553,0.011383,-0.014333
+1.9575,0.13961,0.01714,-0.01714,0.00667,-0.007373
+2.7275,0.172813,0.028938,-0.028938,0.017107,-0.012223
+

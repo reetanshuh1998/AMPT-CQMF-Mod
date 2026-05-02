@@ -57,10 +57,9 @@ def calc_binned_flow(x_data, v_data, bins):
     return bin_centers, np.array(v_mean)
 
 files = {
-    'Default': "ana_highstats/ampt_default.dat",
-    'Mod ($\u03c1_0$)': "ana_highstats/ampt_modified.dat",
-    'Mod (2$\u03c1_0$)': "ana_highstats/ampt_density2.dat",
-    'Mod (3$\u03c1_0$)': "ana_highstats/ampt_density3.dat"
+    'Default': "ana/ampt_default.dat",
+    'Fixed Density ($1\rho_0$)': "ana/ampt_modified.dat",
+    'Local Density (Phase 1)': "ana/ampt_localdensity.dat"
 }
 colors = ['royalblue', 'darkorange', 'forestgreen', 'firebrick']
 
@@ -109,6 +108,7 @@ ax1.set_title('Proton - Antiproton Elliptic Flow Splitting', fontsize=14)
 ax1.legend(fontsize=10)
 
 # Plot STAR v2(p) for comparison on ax2
+ax2 = axs[1]
 s_pt_p, s_v2_p, s_err_p = load_star_data_np('star_data/v2_proton_7.7_0_10.csv')
 if s_pt_p is not None:
     ax2.errorbar(s_pt_p, s_v2_p, yerr=s_err_p, fmt='ks', label='STAR (0-10%)', capsize=3, markersize=6, alpha=0.8)

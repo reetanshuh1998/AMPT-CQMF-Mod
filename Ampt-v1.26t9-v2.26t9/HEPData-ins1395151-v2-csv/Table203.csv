@@ -1,0 +1,15 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t207
+#: name: Table 203
+#: description: No description provided.
+#: data_file: Table203.yaml
+#: keyword reactions: AU AU --> LAMBDABAR X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation | Strange production
+#: keyword cmenergies: 7.7
+#: CENTRALITY [pct],40.0-80.0
+#: RE,AU AU --> LAMBDABAR X
+#: SQRT(S)/NUCLEON [GeV],7.7
+PT [GEV],v2,stat +,stat -,sys +,sys -
+0.7485,-0.027784,0.068264,-0.068264,0.034722,-0.034259
+1.3015,0.105832,0.078004,-0.078004,0.031764,-0.030107
+

@@ -1,0 +1,20 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t26
+#: name: Table 22
+#: description: No description provided.
+#: data_file: Table22.yaml
+#: keyword reactions: AU AU --> K0S X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation | Strange production
+#: keyword cmenergies: 11.5
+#: CENTRALITY [pct],0.0-10.0
+#: RE,AU AU --> K0S X
+#: SQRT(S)/NUCLEON [GeV],11.5
+PT [GEV],v2,stat +,stat -,sys +,sys -
+0.3055,-0.001104,0.007258,-0.007258,0.001387,-0.001358
+0.5055,0.009398,0.004235,-0.004235,0.000632,-0.000625
+0.7055,0.026919,0.003626,-0.003626,8.4e-05,-8.3e-05
+0.9055,0.031971,0.003934,-0.003934,0.00086,-0.00088
+1.1055,0.04547,0.004876,-0.004876,0.000218,-0.000218
+1.3665,0.046724,0.005306,-0.005306,0.000136,-0.000134
+1.8405,0.041553,0.009761,-0.009761,0.000736,-0.000741
+

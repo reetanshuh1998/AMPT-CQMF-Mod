@@ -1,0 +1,16 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t48
+#: name: Table 44
+#: description: No description provided.
+#: data_file: Table44.yaml
+#: keyword reactions: AU AU --> XI- X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 19.6
+#: CENTRALITY [pct],0.0-10.0
+#: RE,AU AU --> XI- X
+#: SQRT(S)/NUCLEON [GeV],19.6
+PT [GEV],v2,stat +,stat -,sys +,sys -
+0.9725,0.013081,0.011966,-0.011966,0.004771,-0.005331
+1.5465,0.039702,0.007993,-0.007993,0.00308,-0.003477
+2.3005,0.050708,0.015866,-0.015866,0.007332,-0.006175
+

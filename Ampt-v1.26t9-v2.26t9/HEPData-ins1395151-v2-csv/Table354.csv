@@ -1,0 +1,15 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t358
+#: name: Table 354
+#: description: No description provided.
+#: data_file: Table354.yaml
+#: keyword reactions: AU AU --> OMEGA- X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 27.0
+#: CENTRALITY [pct],0.0-80.0
+#: RE,AU AU --> OMEGA- X
+#: SQRT(S)/NUCLEON [GeV],27.0
+PT [GEV],v2,stat +,stat -,sys +,sys -
+1.5175,0.057443,0.019771,-0.019771,0.015766,-0.013713
+2.3605,0.126401,0.029191,-0.029191,0.013491,-0.021337
+

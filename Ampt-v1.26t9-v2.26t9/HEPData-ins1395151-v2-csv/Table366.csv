@@ -1,0 +1,20 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t370
+#: name: Table 366
+#: description: No description provided.
+#: data_file: Table366.yaml
+#: keyword reactions: AU AU --> XI- X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 39.0
+#: CENTRALITY [pct],0.0-80.0
+#: RE,AU AU --> XI- X
+#: SQRT(S)/NUCLEON [GeV],39.0
+PT [GEV],v2,stat +,stat -,sys +,sys -
+0.8325,0.035417,0.003991,-0.003991,0.001328,-0.001217
+1.1055,0.056608,0.003733,-0.003733,0.003123,-0.001969
+1.3955,0.07736,0.002407,-0.002407,0.001232,-0.00161
+1.7055,0.102822,0.003747,-0.003747,0.001782,-0.002103
+1.9855,0.122127,0.003298,-0.003298,0.001342,-0.001896
+2.4385,0.146686,0.004535,-0.004535,0.002215,-0.00191
+3.1595,0.14652,0.009342,-0.009342,0.007609,-0.006175
+

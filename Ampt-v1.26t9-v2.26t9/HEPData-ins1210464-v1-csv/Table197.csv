@@ -1,0 +1,16 @@
+#: table_doi: 10.17182/hepdata.102408.v1/t205
+#: name: Table 197
+#: description: The elliptic flow,v_2 of Λ,Λbar as a function of the transverse momentum, p_T,for 0–80% central Au+Au collisions
+#: data_file: Data60,b.yaml
+#: keyword reactions: Au+Au
+#: keyword observables: ∆v_2/p_T
+#: keyword cmenergies: 62.4
+#: keyword phrases: Elliptic flow | RHIC | STAR
+#: SQRT(S) [GEV],62.4
+#: Au+Au,${\Omega}{^-} - \bar{\Omega}{^+}$
+#: Centrality [percentage],0-80
+${p_T}$,$\Delta{v_2}$,sys +,sys -,stat +,stat -,glob +,glob -
+1.1795,0.16222,0.023154,-0.024751,0.031781,-0.031781,0.005906,-0.005906
+1.7735,0.16556,0.007985,-0.009616,0.017222,-0.017222,0.005906,-0.005906
+2.5557,0.16556,0.012428,-0.008652,0.023694,-0.023694,0.005906,-0.005906
+

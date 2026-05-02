@@ -1,0 +1,21 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t332
+#: name: Table 328
+#: description: No description provided.
+#: data_file: Table328.yaml
+#: keyword reactions: AU AU --> LAMBDA X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation | Strange production
+#: keyword cmenergies: 14.5
+#: CENTRALITY [pct],0.0-80.0
+#: RE,AU AU --> LAMBDA X
+#: SQRT(S)/NUCLEON [GeV],14.5
+PT [GEV],v2,stat +,stat -,sys +,sys -
+0.544834,0.032264,0.004211,-0.004211,0.000642,-0.000642
+0.815381,0.042958,0.002642,-0.002642,0.000898,-0.000898
+1.04692,0.057388,0.001796,-0.001796,0.000772,-0.000772
+1.33911,0.081393,0.002006,-0.002006,0.000451,-0.000451
+1.63393,0.100643,0.002643,-0.002643,6.9e-05,-6.9e-05
+1.964,0.123266,0.003515,-0.003515,0.001053,-0.001053
+2.36041,0.138293,0.006513,-0.006513,0.000931,-0.000931
+2.83855,0.139518,0.011783,-0.011783,0.003518,-0.003518
+

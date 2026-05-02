@@ -1,0 +1,18 @@
+#: table_doi: 10.17182/hepdata.102408.v1/t208
+#: name: Table 200
+#: description: The elliptic flow,v_2, of $\phi$ mesons as a function of the transverse momentum, p_T, for 0–80% central Au+Au collisions.
+#: data_file: Data63.yaml
+#: keyword reactions: Au+Au
+#: keyword observables: v_2/p_T
+#: keyword cmenergies: 19.6
+#: keyword phrases: Elliptic flow | RHIC | STAR
+#: SQRT(S) [GEV],19.6
+#: Au+Au,${\phi}$
+#: Centrality [percentage],0-80
+${p_T}$,${v_2}$,sys +,sys -,stat +,stat -,glob +,glob -
+0.6515,0.004295,0.0092,-0.012843,0.00881,-0.00881,0.001807,-0.001807
+0.9975,0.041625,0.003374,-0.002886,0.00663,-0.00663,0.001807,-0.001807
+1.3735,0.074038,0.005495,-0.004349,0.008632,-0.008632,0.001807,-0.001807
+1.7775,0.083401,0.004419,-0.005506,0.013551,-0.013551,0.001807,-0.001807
+2.2605,0.09911,0.002617,-0.003245,0.019711,-0.019711,0.001807,-0.001807
+

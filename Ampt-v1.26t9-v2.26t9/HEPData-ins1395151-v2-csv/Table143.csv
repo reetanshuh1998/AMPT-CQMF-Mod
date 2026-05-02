@@ -1,0 +1,17 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t147
+#: name: Table 143
+#: description: No description provided.
+#: data_file: Table143.yaml
+#: keyword reactions: AU AU --> XIBAR+ X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 19.6
+#: CENTRALITY [pct],10.0-40.0
+#: RE,AU AU --> XIBAR+ X
+#: SQRT(S)/NUCLEON [GeV],19.6
+PT [GEV],v2,stat +,stat -,sys +,sys -
+0.8305,0.032331,0.012993,-0.012993,0.005649,-0.005997
+1.2985,0.070629,0.007521,-0.007521,0.003076,-0.004094
+1.8525,0.110906,0.01016,-0.01016,0.002822,-0.003911
+2.4795,0.131868,0.018637,-0.018637,0.012566,-0.008762
+

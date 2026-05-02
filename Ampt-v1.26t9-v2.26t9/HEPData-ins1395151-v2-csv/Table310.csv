@@ -1,0 +1,17 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t314
+#: name: Table 310
+#: description: No description provided.
+#: data_file: Table310.yaml
+#: keyword reactions: AU AU --> XI- X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 11.5
+#: CENTRALITY [pct],0.0-80.0
+#: RE,AU AU --> XI- X
+#: SQRT(S)/NUCLEON [GeV],11.5
+PT [GEV],v2,stat +,stat -,sys +,sys -
+0.8275,0.025151,0.01643,-0.01643,0.008585,-0.005273
+1.2905,0.057016,0.009506,-0.009506,0.006192,-0.005077
+1.7835,0.117009,0.015283,-0.015283,0.008416,-0.010331
+2.2835,0.153001,0.02135,-0.02135,0.008434,-0.010418
+

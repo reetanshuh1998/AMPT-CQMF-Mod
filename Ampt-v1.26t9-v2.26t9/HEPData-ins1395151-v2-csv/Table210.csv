@@ -1,0 +1,19 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t214
+#: name: Table 210
+#: description: No description provided.
+#: data_file: Table210.yaml
+#: keyword reactions: AU AU --> K+ X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation | Strange production
+#: keyword cmenergies: 7.7
+#: CENTRALITY [pct],40.0-80.0
+#: RE,AU AU --> K+ X
+#: SQRT(S)/NUCLEON [GeV],7.7
+PT [GEV],v2,stat +,stat -,sys +,sys -
+0.315,0.009254,0.01027,-0.01027,1.1e-05,-2.2e-05
+0.495,0.039532,0.007,-0.007,3.2e-05,-2e-05
+0.705,0.056583,0.007668,-0.007668,0.00035,-0.000184
+0.885,0.077938,0.009846,-0.009846,0.000483,-0.000925
+1.155,0.077019,0.011196,-0.011196,0.00012,-8.9e-05
+1.545,0.142544,0.023886,-0.023886,0.000428,-0.000468
+

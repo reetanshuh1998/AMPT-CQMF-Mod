@@ -1,0 +1,14 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t301
+#: name: Table 297
+#: description: No description provided.
+#: data_file: Table297.yaml
+#: keyword reactions: AU AU --> XIBAR+ X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 7.7
+#: CENTRALITY [pct],0.0-80.0
+#: RE,AU AU --> XIBAR+ X
+#: SQRT(S)/NUCLEON [GeV],7.7
+PT [GEV],v2,stat +,stat -,sys +,sys -
+1.3775,-0.014892,0.062882,-0.062882,0.018988,-0.022397
+

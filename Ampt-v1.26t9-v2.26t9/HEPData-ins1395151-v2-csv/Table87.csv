@@ -1,0 +1,18 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t91
+#: name: Table 87
+#: description: No description provided.
+#: data_file: Table87.yaml
+#: keyword reactions: AU AU --> XIBAR+ X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 62.4
+#: CENTRALITY [pct],0.0-10.0
+#: RE,AU AU --> XIBAR+ X
+#: SQRT(S)/NUCLEON [GeV],62.4
+PT [GEV],v2,stat +,stat -,sys +,sys -
+0.9855,0.016472,0.011762,-0.011762,0.005464,-0.005723
+1.4015,0.025998,0.008959,-0.008959,0.005371,-0.005326
+1.7935,0.056429,0.009538,-0.009538,0.006002,-0.003562
+2.1855,0.070107,0.012662,-0.012662,0.004261,-0.005289
+2.6895,0.086973,0.015562,-0.015562,0.010767,-0.01187
+

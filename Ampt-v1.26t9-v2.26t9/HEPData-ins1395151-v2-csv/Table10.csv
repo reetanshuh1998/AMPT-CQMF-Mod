@@ -1,0 +1,15 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t14
+#: name: Table 10
+#: description: No description provided.
+#: data_file: Table10.yaml
+#: keyword reactions: AU AU --> PBAR X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 7.7
+#: CENTRALITY [pct],0.0-10.0
+#: RE,AU AU --> PBAR X
+#: SQRT(S)/NUCLEON [GeV],7.7
+PT [GEV],v2,stat +,stat -,sys +,sys -
+0.765,-0.007079,0.016286,-0.016286,0.006397,-0.005635
+1.485,-0.0032,0.029392,-0.029392,0.003674,-0.00672
+

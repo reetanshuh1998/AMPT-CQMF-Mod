@@ -1,0 +1,19 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t75
+#: name: Table 71
+#: description: No description provided.
+#: data_file: Table71.yaml
+#: keyword reactions: AU AU --> PHI X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 39.0
+#: CENTRALITY [pct],0.0-10.0
+#: RE,AU AU --> PHI X
+#: SQRT(S)/NUCLEON [GeV],39.0
+PT [GEV],v2,stat +,stat -,sys +,sys -
+0.6525,-0.022236,0.010845,-0.010845,0.007643,-0.009633
+0.9055,0.008777,0.010475,-0.010475,0.005435,-0.006482
+1.1055,0.02797,0.010431,-0.010431,0.003523,-0.004129
+1.4425,0.03069,0.00775,-0.00775,0.002835,-0.001879
+2.0445,0.0689,0.013304,-0.013304,0.002465,-0.004024
+2.6655,0.094695,0.024304,-0.024304,0.001891,-0.002613
+

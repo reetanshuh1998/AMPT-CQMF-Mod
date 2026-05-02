@@ -1,0 +1,15 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t162
+#: name: Table 158
+#: description: No description provided.
+#: data_file: Table158.yaml
+#: keyword reactions: AU AU --> OMEGA- X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 27.0
+#: CENTRALITY [pct],10.0-40.0
+#: RE,AU AU --> OMEGA- X
+#: SQRT(S)/NUCLEON [GeV],27.0
+PT [GEV],v2,stat +,stat -,sys +,sys -
+1.4185,0.090085,0.021417,-0.021417,0.009939,-0.011879
+2.1975,0.150465,0.024172,-0.024172,0.008529,-0.02041
+

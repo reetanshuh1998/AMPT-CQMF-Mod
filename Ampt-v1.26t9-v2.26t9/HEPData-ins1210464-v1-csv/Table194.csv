@@ -1,0 +1,24 @@
+#: table_doi: 10.17182/hepdata.102408.v1/t202
+#: name: Table 194
+#: description: The elliptic flow,v_2 of $Omega^{-}$ and $\overline{\Omega^{+}}$ as a function of the transverse momentum, p_T,for 0–80% central Au+Au collisions.
+#: data_file: Data59,a.yaml
+#: keyword reactions: Au+Au
+#: keyword observables: v_2/p_T
+#: keyword cmenergies: 39
+#: keyword phrases: Elliptic flow | RHIC | STAR
+#: SQRT(S) [GEV],39
+#: Au+Au,${\Omega}{^-}$
+#: Centrality [percentage],0-80
+${p_T}$,${v_2}$,sys +,sys -,stat +,stat -,glob +,glob -
+1.3175,0.035876,0.014735,-0.00799,0.017966,-0.017966,0.003313,-0.003313
+1.9475,0.103293,0.009063,-0.011785,0.015258,-0.015258,0.003313,-0.003313
+2.7075,0.131106,0.012091,-0.018436,0.027008,-0.027008,0.003313,-0.003313
+
+#: SQRT(S) [GEV],39
+#: Au+Au,$\bar{\Omega}{^+}$
+#: Centrality [percentage],0-80
+${p_T}$,${v_2}$,sys +,sys -,stat +,stat -,glob +,glob -
+1.3175,0.035876,0.014735,-0.00799,0.017966,-0.017966,0.003313,-0.003313
+1.9475,0.103293,0.009063,-0.011785,0.015258,-0.015258,0.003313,-0.003313
+2.7075,0.131106,0.012091,-0.018436,0.027008,-0.027008,0.003313,-0.003313
+

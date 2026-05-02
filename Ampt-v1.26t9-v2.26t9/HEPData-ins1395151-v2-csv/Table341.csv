@@ -1,0 +1,15 @@
+#: table_doi: 10.17182/hepdata.71527.v2/t345
+#: name: Table 341
+#: description: No description provided.
+#: data_file: Table341.yaml
+#: keyword reactions: AU AU --> OMEGABAR+ X
+#: keyword observables: V2
+#: keyword phrases: Inclusive | Angular Correlation
+#: keyword cmenergies: 19.6
+#: CENTRALITY [pct],0.0-80.0
+#: RE,AU AU --> OMEGABAR+ X
+#: SQRT(S)/NUCLEON [GeV],19.6
+PT [GEV],v2,stat +,stat -,sys +,sys -
+1.4195,0.049285,0.039209,-0.039209,0.016165,-0.016972
+2.1875,0.096625,0.046856,-0.046856,0.042037,-0.022582
+

@@ -1,0 +1,15 @@
+#: table_doi: 10.17182/hepdata.102408.v1/t337
+#: name: Table 345
+#: description: The difference in the v_2 values between a particle X and its corresponding anti-particle $\overline{X}$ as a function of $μ_B$ for 0–80% central Au+Au collisions.
+#: data_file: Data88,a.yaml
+#: keyword reactions: Au+Au
+#: keyword phrases: Elliptic flow | RHIC | STAR
+#: Au+Au,${\Xi}{^-} - {\bar{\Xi}{^+}}$
+#: Centrality [percentage],0-80
+$\mu_b$,${v_2}(X)-{v_2}(\bar{X})$,stat +,stat -
+0.047966,0.0029169,0.013085,-0.013085
+0.075436,0.0047722,0.009215,-0.009215
+0.10637,0.0046505,0.009799,-0.009799
+0.14061,0.014947,0.012096,-0.012096
+0.22089,0.05704,0.024583,-0.024583
+
