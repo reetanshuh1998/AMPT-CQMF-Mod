@@ -177,7 +177,15 @@ c
         ngetht = 0
         npp2fallback = 0
 
-c       --- LOCAL DENSITY MODE (iqmc=2) initialization ---
+c       --- CQMF MODIFICATION [LOCAL DENSITY MODE initialization] ---
+c WHAT: If iqmc=2, initialize the local space-time density framework.
+c WHY:  Paper 2 aims to compute the medium modifications dynamically 
+c       from the evolving 3D density grid rather than assuming a
+c       fixed global density.
+c HOW:  Calls load_qmc_table() to parse 'model_data.csv' so it can
+c       interpolate values later. Sets dt_med=0.1 fm/c for periodic
+c       grid rebuilding.
+c       --- END CQMF MODIFICATION ---
         if (iqmc .eq. 2) then
            call load_qmc_table()
            dt_med = 0.1d0
@@ -1231,10 +1239,16 @@ c --- CQMF LOCAL DENSITY: Phase 2 forces disabled until collision ---
 c --- rescheduling is implemented. Uncomment when ready: ---
 c        call qmc_evolve_all_partons(t, t1)
         t = t1
-c --- CQMF LOCAL DENSITY: rebuild density grid periodically ---
-c     Phase 1: only rebuild grid, do NOT reassign parton masses
-c     (that invalidates collision times). Masses are read locally
-c     in getht() at each collision.
+c --- CQMF MODIFICATION [LOCAL DENSITY Phase 1] ---
+c WHAT: Periodically rebuild the 3D local density grid.
+c WHY:  As partons propagate and interact, the local density
+c       changes. We need an updated field to extract local m*, V.
+c HOW:  Calls qmc_grid_rebuild(t) every dt_med fm/c. 
+c       IMPORTANT (Phase 1): It ONLY rebuilds the density fields.
+c       It does NOT reassign parton masses/momenta here, because
+c       doing so would invalidate ZPC's collision time scheduler
+c       and cause a 'tterr' crash. Masses are read at collision time.
+c --- END CQMF MODIFICATION ---
         call qmc_grid_rebuild(t)
         if (mod(ictype, 2) .eq. 0) then
            icolln = icolln + 1
@@ -2325,7 +2339,15 @@ c       --- CUSTOM CQMF MODIFICATION: Flavor-dependent mass ---
            call qmc_mass_vpot_from_ityp(ityp2, xm2p, vpot2)
            
            else
-c            Local density (iqmc=2): look up from density grid
+c            --- CQMF MODIFICATION [LOCAL DENSITY (iqmc=2)] ---
+c WHAT:      For iqmc=2, fetch m* and V dynamically based on the parton's
+c            current position in the 3D density grid.
+c WHY:       Partons experience different medium effects depending on 
+c            the local baryon density at their spatial coordinate.
+c HOW:       Calls get_local_mass_vpot, which checks the parton's (x,y,z),
+c            finds its cell in the grid, and retrieves the interpolated
+c            m* and V for that specific cell.
+c            --- END CQMF MODIFICATION ---
              call get_local_mass_vpot(iscat, xm1, vpot1)
              call get_local_mass_vpot(jscat, xm2p, vpot2)
            endif
@@ -7660,10 +7682,16 @@ c-------------------------------------------------------------
 
       end
 
-c-------------------------------------------------------------
-c  Phase 1 grid rebuild: only density grid + cell fields,
-c  does NOT touch parton xmass/e (preserves collision table)
-c-------------------------------------------------------------
+c=============================================================
+c --- CQMF MODIFICATION [qmc_grid_rebuild] ---
+c
+c WHAT: Phase 1 driver for local density. Rebuilds the grid
+c       periodically (every dt_med) without altering partons.
+c WHY:  To provide a space-time dependent density field for
+c       collisions without breaking the ZPC collision scheduler.
+c HOW:  Calls build_rhob_grid -> smooth_rhob -> update_cell_fields.
+c       Does NOT touch xmass(i) or e(i).
+c --- END CQMF MODIFICATION ---
       subroutine qmc_grid_rebuild(tcur)
       implicit double precision (a-h,o-z)
       common /qmcpar/ xmu_q, xmd_q, xms_q, iqmc
@@ -7682,9 +7710,18 @@ c-------------------------------------------------------------
       return
       end
 
-c-------------------------------------------------------------
-c  Get local CQMF mass and V for a parton at its current pos
-c-------------------------------------------------------------
+c=============================================================
+c --- CQMF MODIFICATION [get_local_mass_vpot] ---
+c
+c WHAT: Extracts the CQMF effective mass and vector potential
+c       for a given parton based on its current position.
+c WHY:  Used by getht() during a collision to apply the correct
+c       local medium modification.
+c HOW:  1) Maps (gx,gy,gz) to a 10x10x10 cell via pos_to_cell.
+c       2) Looks up the pre-computed m*, V in that cell for
+c          the specific quark flavor.
+c       3) Flips the vector potential sign for antiquarks.
+c --- END CQMF MODIFICATION ---
       subroutine get_local_mass_vpot(ii, xm_out, v_out)
       implicit double precision (a-h,o-z)
       parameter (MAXPTN=400001)

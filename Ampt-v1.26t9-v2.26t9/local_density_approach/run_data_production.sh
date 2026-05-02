@@ -15,9 +15,9 @@ echo "Generating authoritative model_data.csv..."
 python3 build_v2_csv.py
 
 # CQMF Mode Configuration
-# 1 = Fixed Uniform Density (Default)
-# 2 = Local Space-Time Density
-CQMF_MODE=${1:-1}
+# 1 = Fixed Uniform Density
+# 2 = Local Space-Time Density (Default)
+CQMF_MODE=${1:-2}
 
 if [ "$CQMF_MODE" != "1" ] && [ "$CQMF_MODE" != "2" ]; then
     echo "ERROR: Invalid CQMF mode. Must be 1 (fixed density) or 2 (local density)."
