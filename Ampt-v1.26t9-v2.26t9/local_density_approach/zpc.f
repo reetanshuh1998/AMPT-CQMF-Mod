@@ -2405,8 +2405,9 @@ c            --- END CQMF MODIFICATION ---
            endif
            ! -----------------------------------------------
            
-           ! Average mass squared for the screening Kernel
-           xmp2 = ((xm1 + xm2p) / 2.0d0)**2
+           ! CQMF CORRECTION: Use standard screening mass (mu_D), do not inflate 
+           ! cross-sections artificially with the dropping constituent chiral mass.
+           xmp2 = xmp ** 2
            ! pp2_use is already set above
         else
            xmp2 = xmp ** 2
@@ -7227,6 +7228,9 @@ c-------------------------------------------------------------
      &     vu_c(10,10,10),vd_c(10,10,10),vs_c(10,10,10)
       save /qmcgrid/
       double precision Bcell(10,10,10)
+      double precision Ecell(10,10,10), Pxcell(10,10,10)
+      double precision Pycell(10,10,10), Pzcell(10,10,10)
+      double precision v2cell, gamma
       integer ix,iy,iz,inside
       save
 
@@ -7234,6 +7238,10 @@ c-------------------------------------------------------------
       do iy=1,10
       do ix=1,10
          Bcell(ix,iy,iz)=0d0
+         Ecell(ix,iy,iz)=0d0
+         Pxcell(ix,iy,iz)=0d0
+         Pycell(ix,iy,iz)=0d0
+         Pzcell(ix,iy,iz)=0d0
       enddo
       enddo
       enddo
@@ -7242,6 +7250,12 @@ c-------------------------------------------------------------
          if (tcur .lt. ft(i)) goto 10
          call pos_to_cell(gx(i),gy(i),gz(i),ix,iy,iz,inside)
          if (inside .eq. 0) goto 10
+         
+         Ecell(ix,iy,iz) = Ecell(ix,iy,iz) + e(i)
+         Pxcell(ix,iy,iz) = Pxcell(ix,iy,iz) + px(i)
+         Pycell(ix,iy,iz) = Pycell(ix,iy,iz) + py(i)
+         Pzcell(ix,iy,iz) = Pzcell(ix,iy,iz) + pz(i)
+         
          if (abs(ityp(i)).ge.1 .and. abs(ityp(i)).le.3) then
             if (ityp(i) .gt. 0) then
                Bcell(ix,iy,iz) = Bcell(ix,iy,iz) + 1d0/3d0
@@ -7261,7 +7275,17 @@ c-------------------------------------------------------------
       do iz=1,10
       do iy=1,10
       do ix=1,10
-         rhob(ix,iy,iz) = Bcell(ix,iy,iz)/Vcell
+         if (Ecell(ix,iy,iz) .gt. 1d-10) then
+            v2cell = (Pxcell(ix,iy,iz)**2 + Pycell(ix,iy,iz)**2 
+     &              + Pzcell(ix,iy,iz)**2) / (Ecell(ix,iy,iz)**2)
+            if (v2cell .ge. 1d0) v2cell = 0.999999d0
+            gamma = 1d0 / dsqrt(1d0 - v2cell)
+         else
+            gamma = 1d0
+         endif
+         
+         ! Convert lab-frame density to proper scalar density
+         rhob(ix,iy,iz) = (Bcell(ix,iy,iz)/Vcell) / gamma
       enddo
       enddo
       enddo
