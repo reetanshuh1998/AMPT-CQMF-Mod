@@ -6526,8 +6526,16 @@ cc      SAVE /para5/
         end if
 
         if (iqmc .eq. 1) then
-           write(25,*) 'CQMF diag: ngetht=', ngetht,
-     &                 ' npp2fallback=', npp2fallback
+           write(25,*) '--- CQMF Scattering Diagnostics ---'
+           write(25,*) '  m_u=', xmu_q, ' m_d=', xmd_q,
+     &                 ' m_s=', xms_q
+           write(25,*) '  ngetht=', ngetht,
+     &                 '  npp2fallback=', npp2fallback
+           if (ngetht .gt. 0) then
+              write(25,*) '  fallback_ratio=',
+     &             dble(npp2fallback)/dble(ngetht)*100.0d0, ' %'
+           endif
+           write(25,*) '-----------------------------------'
         endif
 
         return
