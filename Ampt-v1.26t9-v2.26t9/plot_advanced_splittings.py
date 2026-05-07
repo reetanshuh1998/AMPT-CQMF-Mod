@@ -57,11 +57,13 @@ def calc_binned_flow(x_data, v_data, bins):
     return bin_centers, np.array(v_mean)
 
 files = {
-    'Default': "ana/ampt_default.dat",
-    'Fixed Density ($1\rho_0$)': "ana/ampt_modified.dat",
-    'Local Density (Phase 1)': "ana/ampt_localdensity.dat"
+    'Default (No Medium)':    "local_density_approach/ana/ampt_default.dat",
+    'Fixed ρ=1ρ₀':           "local_density_approach/ana/ampt_fixed_rho1.dat",
+    'Fixed ρ=2ρ₀':           "local_density_approach/ana/ampt_fixed_rho2.dat",
+    'Fixed ρ=3ρ₀':           "local_density_approach/ana/ampt_fixed_rho3.dat",
+    'Local Density (iqmc=2)': "local_density_approach/ana/ampt_localdensity_fixed.dat",
 }
-colors = ['royalblue', 'darkorange', 'forestgreen', 'firebrick']
+colors = ['royalblue', 'darkorange', 'forestgreen', 'firebrick', 'purple']
 
 all_data = {}
 for name, fpath in files.items():
@@ -107,10 +109,19 @@ ax1.set_ylabel(r'$\Delta v_2 (p - \overline{p})$', fontsize=12)
 ax1.set_title('Proton - Antiproton Elliptic Flow Splitting', fontsize=14)
 ax1.legend(fontsize=10)
 
-# Plot STAR v2(p) for comparison on ax2
+# Plot simulated v2(p) for all models on ax2
 ax2 = axs[1]
+for i, name in enumerate(files.keys()):
+    d_p = all_data[name]['p']
+    if len(d_p['pt']) > 0:
+        mask_p = np.abs(d_p['y']) < 0.5
+        pt_cen, v2_p = calc_binned_flow(d_p['pt'][mask_p], d_p['v2'][mask_p], pt_bins)
+        ax2.plot(pt_cen, v2_p, marker='D', color=colors[i], label=name)
+
+# Plot STAR v2(p) for comparison on ax2
 s_pt_p, s_v2_p, s_err_p = load_star_data_np('star_data/v2_proton_7.7_0_10.csv')
 if s_pt_p is not None:
+    ax2.errorbar(s_pt_p, s_v2_p, yerr=s_err_p, fmt='ks', label='STAR (0-10%)', capsize=3, markersize=6, alpha=0.8)
     ax2.errorbar(s_pt_p, s_v2_p, yerr=s_err_p, fmt='ks', label='STAR (0-10%)', capsize=3, markersize=6, alpha=0.8)
 
 ax2.axhline(0, color='black', linewidth=0.8)

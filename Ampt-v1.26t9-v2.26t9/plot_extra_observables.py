@@ -60,11 +60,13 @@ def calc_binned_mean(x_data, v_data, bins):
     return bin_centers, np.array(v_mean)
 
 files = {
-    'Default': "ana/ampt_default.dat",
-    'Fixed Density ($1\rho_0$)': "ana/ampt_modified.dat",
-    'Local Density (Phase 1)': "ana/ampt_localdensity.dat"
+    'Default (No Medium)':    "local_density_approach/ana/ampt_default.dat",
+    'Fixed ρ=1ρ₀':           "local_density_approach/ana/ampt_fixed_rho1.dat",
+    'Fixed ρ=2ρ₀':           "local_density_approach/ana/ampt_fixed_rho2.dat",
+    'Fixed ρ=3ρ₀':           "local_density_approach/ana/ampt_fixed_rho3.dat",
+    'Local Density (iqmc=2)': "local_density_approach/ana/ampt_localdensity_fixed.dat",
 }
-colors = ['royalblue', 'darkorange', 'forestgreen', 'firebrick']
+colors = ['royalblue', 'darkorange', 'forestgreen', 'firebrick', 'purple']
 
 all_data = {}
 all_events = {}
@@ -124,7 +126,7 @@ ax.legend()
 
 # 3. v1 slope dv1/dy at mid-rapidity for Protons
 ax = axs[1, 0]
-densities = [0, 1, 2, 3] # Default proxy is 0 
+densities = [0, 1, 2, 3, 4] # Default proxy is 0
 slopes = []
 for name in files.keys():
     if 2212 in all_data[name]:

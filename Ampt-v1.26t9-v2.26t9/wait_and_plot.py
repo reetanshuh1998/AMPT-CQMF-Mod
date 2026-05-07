@@ -1,6 +1,6 @@
 import time, os, subprocess
 print("Waiting for ampt_localdensity.dat to be successfully generated...")
-while not os.path.exists("ana/ampt_localdensity.dat"):
+while not os.path.exists("local_density_approach/ana/ampt_localdensity.dat"):
     time.sleep(10)
 time.sleep(5)  # Wait for file to finish writing
 print("Data found! Running plotting scripts...")

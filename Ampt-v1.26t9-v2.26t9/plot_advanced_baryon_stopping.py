@@ -39,11 +39,13 @@ def extract_stopping_data(filename):
     return data, max(num_events, 1)
 
 files = {
-    'Default': "ana/ampt_default.dat",
-    'Fixed Density ($1\rho_0$)': "ana/ampt_modified.dat",
-    'Local Density (Phase 1)': "ana/ampt_localdensity.dat"
+    'Default (No Medium)':    "local_density_approach/ana/ampt_default.dat",
+    'Fixed ρ=1ρ₀':           "local_density_approach/ana/ampt_fixed_rho1.dat",
+    'Fixed ρ=2ρ₀':           "local_density_approach/ana/ampt_fixed_rho2.dat",
+    'Fixed ρ=3ρ₀':           "local_density_approach/ana/ampt_fixed_rho3.dat",
+    'Local Density (iqmc=2)': "local_density_approach/ana/ampt_localdensity_fixed.dat",
 }
-colors = ['royalblue', 'darkorange', 'forestgreen', 'firebrick']
+colors = ['royalblue', 'darkorange', 'forestgreen', 'firebrick', 'purple']
 
 all_data = {}
 all_events = {}

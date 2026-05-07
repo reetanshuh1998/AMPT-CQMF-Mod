@@ -1,0 +1,48 @@
+7.7            ! EFRM
+CMS            ! FRAME
+A              ! PROJ
+A              ! TARG
+197            ! IAP
+79             ! IZP
+197            ! IAT
+79             ! IZT
+1              ! NEVNT
+0.             ! BMIN
+15.            ! BMAX
+4              ! ISOFT
+150            ! NTMAX
+0.2            ! DT
+0.55           ! PARJ(41)
+0.15           ! PARJ(42)
+1              ! popcorn
+1.0            ! PARJ(5)
+1              ! shadowing
+0              ! quenching
+2.0            ! quenching param
+2.0            ! p0 cutoff
+2.265d0        ! parton screening mass (3 mb)
+0              ! IZPC
+0.33d0         ! alpha
+1d6            ! dpcoal
+1d6            ! drcoal
+11             ! ihjsed
+13150909       ! random seed
+8              ! random seed for ZPC
+0              ! K0s decay
+1              ! phi decay
+0              ! pi0 decay
+0              ! OSCAR output
+0              ! deuteron perturbative
+1              ! NPERTD
+1              ! idxsec
+-7.            ! pttrig
+1000           ! maxmiss
+3              ! ISR/FSR
+1              ! Kt kick
+0              ! embedding
+7., 0.
+0., 0.
+1, 5., 0.
+0              ! ishadow
+1.d0           ! dshadow
+0              ! iphirp

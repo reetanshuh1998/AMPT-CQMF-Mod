@@ -188,7 +188,7 @@ c       grid rebuilding.
 c       --- END CQMF MODIFICATION ---
         if (iqmc .eq. 2) then
            call load_qmc_table()
-           dt_med = 0.1d0
+           dt_med = 1.0d0
            t_last_med = -1d30
            write(6,*) 'CQMF LOCAL DENSITY MODE enabled'
            write(6,*) '  dt_med=', dt_med, ' fm/c'
@@ -2390,7 +2390,6 @@ c            --- END CQMF MODIFICATION ---
            endif
            
            ! 3. STABILITY: Fallback to kinetic phase space instead of cancelling
-           ngetht = ngetht + 1
            if (pp2_tot .le. 0.0d0) then
               npp2fallback = npp2fallback + 1
               pp2_use = pp2_star
@@ -7223,16 +7222,61 @@ c-------------------------------------------------------------
      &     px(MAXPTN),py(MAXPTN),pz(MAXPTN),e(MAXPTN),
      &     xmass(MAXPTN),ityp(MAXPTN)
       common /ilist3/ size1, size2, size3, v1, v2, v3, size
+c --- CQMF MODIFICATION [build_rhob_grid: dynamic bounding box] ---
+c WHAT: Replace fixed size1/size2/size3 grid with a dynamic bounding
+c       box computed from actual parton positions at time tcur.
+c WHY:  Fixed box (15x15x7 fm) misses all partons in peripheral events
+c       (b~14 fm) where partons span >28 fm in x,y. This caused
+c       all partons to register as "outside" -> zero density everywhere.
+c HOW:  Scan all active partons to find (xmin,xmax,ymin,ymax,zmin,zmax),
+c       add 1 fm padding, and use this as the dynamic grid boundary.
+c       This ensures 100% of partons are always inside the grid.
+c --- END CQMF MODIFICATION ---
       common /qmcgrid/ rhob(10,10,10),
      &     mu_c(10,10,10),md_c(10,10,10),ms_c(10,10,10),
      &     vu_c(10,10,10),vd_c(10,10,10),vs_c(10,10,10)
       save /qmcgrid/
+      common /qmcbox/ gxmin,gxmax,gymin,gymax,gzmin,gzmax
+      save /qmcbox/
       double precision Bcell(10,10,10)
       double precision Ecell(10,10,10), Pxcell(10,10,10)
       double precision Pycell(10,10,10), Pzcell(10,10,10)
       double precision v2cell, gamma
+      double precision dx,dy,dz,Vcell
       integer ix,iy,iz,inside
       save
+
+c     Step 1: Find dynamic bounding box from active partons
+      gxmin =  1d10
+      gxmax = -1d10
+      gymin =  1d10
+      gymax = -1d10
+      gzmin =  1d10
+      gzmax = -1d10
+
+      do i=1,mul
+         if (tcur .lt. ft(i)) goto 5
+         if (gx(i) .lt. gxmin) gxmin = gx(i)
+         if (gx(i) .gt. gxmax) gxmax = gx(i)
+         if (gy(i) .lt. gymin) gymin = gy(i)
+         if (gy(i) .gt. gymax) gymax = gy(i)
+         if (gz(i) .lt. gzmin) gzmin = gz(i)
+         if (gz(i) .gt. gzmax) gzmax = gz(i)
+ 5       continue
+      enddo
+
+c     Add 1 fm padding; fallback to minimum 2 fm box if no active partons
+      if (gxmin .gt. gxmax) then
+         gxmin=-1d0; gxmax=1d0; gymin=-1d0; gymax=1d0
+         gzmin=-1d0; gzmax=1d0
+      else
+         gxmin = gxmin - 1d0
+         gxmax = gxmax + 1d0
+         gymin = gymin - 1d0
+         gymax = gymax + 1d0
+         gzmin = gzmin - 1d0
+         gzmax = gzmax + 1d0
+      endif
 
       do iz=1,10
       do iy=1,10
@@ -7248,14 +7292,30 @@ c-------------------------------------------------------------
 
       do i=1,mul
          if (tcur .lt. ft(i)) goto 10
-         call pos_to_cell(gx(i),gy(i),gz(i),ix,iy,iz,inside)
-         if (inside .eq. 0) goto 10
-         
+
+c        Map to dynamic grid cell
+         dx_cell = (gxmax-gxmin)/10d0
+         dy_cell = (gymax-gymin)/10d0
+         dz_cell = (gzmax-gzmin)/10d0
+         if (dx_cell .lt. 1d-10) dx_cell=1d-10
+         if (dy_cell .lt. 1d-10) dy_cell=1d-10
+         if (dz_cell .lt. 1d-10) dz_cell=1d-10
+
+         ix = int((gx(i)-gxmin)/dx_cell) + 1
+         iy = int((gy(i)-gymin)/dy_cell) + 1
+         iz = int((gz(i)-gzmin)/dz_cell) + 1
+         if(ix.lt.1) ix=1
+         if(ix.gt.10) ix=10
+         if(iy.lt.1) iy=1
+         if(iy.gt.10) iy=10
+         if(iz.lt.1) iz=1
+         if(iz.gt.10) iz=10
+
          Ecell(ix,iy,iz) = Ecell(ix,iy,iz) + e(i)
          Pxcell(ix,iy,iz) = Pxcell(ix,iy,iz) + px(i)
          Pycell(ix,iy,iz) = Pycell(ix,iy,iz) + py(i)
          Pzcell(ix,iy,iz) = Pzcell(ix,iy,iz) + pz(i)
-         
+
          if (abs(ityp(i)).ge.1 .and. abs(ityp(i)).le.3) then
             if (ityp(i) .gt. 0) then
                Bcell(ix,iy,iz) = Bcell(ix,iy,iz) + 1d0/3d0
@@ -7266,9 +7326,9 @@ c-------------------------------------------------------------
  10      continue
       enddo
 
-      dx = (10d0*size1)/10d0
-      dy = (10d0*size2)/10d0
-      dz = (10d0*size3)/10d0
+      dx = (gxmax-gxmin)/10d0
+      dy = (gymax-gymin)/10d0
+      dz = (gzmax-gzmin)/10d0
       Vcell = dx*dy*dz
       if (Vcell .lt. 1d-20) Vcell = 1d-20
 
@@ -7276,15 +7336,15 @@ c-------------------------------------------------------------
       do iy=1,10
       do ix=1,10
          if (Ecell(ix,iy,iz) .gt. 1d-10) then
-            v2cell = (Pxcell(ix,iy,iz)**2 + Pycell(ix,iy,iz)**2 
+            v2cell = (Pxcell(ix,iy,iz)**2 + Pycell(ix,iy,iz)**2
      &              + Pzcell(ix,iy,iz)**2) / (Ecell(ix,iy,iz)**2)
             if (v2cell .ge. 1d0) v2cell = 0.999999d0
             gamma = 1d0 / dsqrt(1d0 - v2cell)
          else
             gamma = 1d0
          endif
-         
-         ! Convert lab-frame density to proper scalar density
+
+         ! Convert lab-frame density to Lorentz-invariant proper scalar density
          rhob(ix,iy,iz) = (Bcell(ix,iy,iz)/Vcell) / gamma
       enddo
       enddo
@@ -7292,6 +7352,7 @@ c-------------------------------------------------------------
 
       return
       end
+
 
 c-------------------------------------------------------------
       subroutine smooth_rhob()
@@ -7465,16 +7526,33 @@ c-------------------------------------------------------------
      &     vu_c(10,10,10),vd_c(10,10,10),vs_c(10,10,10)
       save /qmcgrid/
       common /qmcv0p/ v0p(MAXPTN)
+      common /qmcbox/ gxmin,gxmax,gymin,gymax,gzmin,gzmax
+      save /qmcbox/
+      double precision dx_cell,dy_cell,dz_cell
       save /qmcv0p/
-      integer ix,iy,iz,inside,ifl
+      integer ix,iy,iz,ifl
       double precision xm_loc,v_loc
       save
 
       do i=1,mul
          if (tcur .lt. ft(i)) goto 20
 
-         call pos_to_cell(gx(i),gy(i),gz(i),ix,iy,iz,inside)
-         if (inside .eq. 0) goto 20
+c        Map to dynamic bounding box set by last build_rhob_grid call
+         dx_cell = (gxmax-gxmin)/10d0
+         dy_cell = (gymax-gymin)/10d0
+         dz_cell = (gzmax-gzmin)/10d0
+         if (dx_cell .lt. 1d-10) dx_cell=1d-10
+         if (dy_cell .lt. 1d-10) dy_cell=1d-10
+         if (dz_cell .lt. 1d-10) dz_cell=1d-10
+         ix = int((gx(i)-gxmin)/dx_cell) + 1
+         iy = int((gy(i)-gymin)/dy_cell) + 1
+         iz = int((gz(i)-gzmin)/dz_cell) + 1
+         if(ix.lt.1) ix=1
+         if(ix.gt.10) ix=10
+         if(iy.lt.1) iy=1
+         if(iy.gt.10) iy=10
+         if(iz.lt.1) iz=1
+         if(iz.gt.10) iz=10
 
          ifl = ityp(i)
          if (abs(ifl).eq.21 .or. abs(ifl).eq.9) then
@@ -7611,7 +7689,7 @@ c-------------------------------------------------------------
      &     dmd_x(10,10,10),dmd_y(10,10,10),dmd_z(10,10,10),
      &     dms_x(10,10,10),dms_y(10,10,10),dms_z(10,10,10)
       save /qmcgrad/
-      integer ix,iy,iz,inside,ifl
+      integer ix,iy,iz,ifl
       double precision fx,fy,fz,moe,sgn
       save
 
@@ -7756,7 +7834,10 @@ c --- END CQMF MODIFICATION ---
      &     mu_c(10,10,10),md_c(10,10,10),ms_c(10,10,10),
      &     vu_c(10,10,10),vd_c(10,10,10),vs_c(10,10,10)
       save /qmcgrid/
-      integer ix,iy,iz,inside,ifl
+      common /qmcbox/ gxmin,gxmax,gymin,gymax,gzmin,gzmax
+      save /qmcbox/
+      integer ix,iy,iz,ifl
+      double precision dx_cell,dy_cell,dz_cell
       save
 
       ifl = ityp(ii)
@@ -7765,11 +7846,25 @@ c --- END CQMF MODIFICATION ---
 
       if(abs(ifl).eq.21.or.abs(ifl).eq.9) return
 
-      call pos_to_cell(gx(ii),gy(ii),gz(ii),ix,iy,iz,inside)
-      if(inside.eq.0) then
+c     Map parton position to dynamic grid cell
+      dx_cell = (gxmax-gxmin)/10d0
+      dy_cell = (gymax-gymin)/10d0
+      dz_cell = (gzmax-gzmin)/10d0
+      if (dx_cell .lt. 1d-10) then
          call qmc_mass_vpot_from_ityp(ifl, xm_out, v_out)
+         if (ifl.lt.0) v_out=-v_out
          return
       endif
+
+      ix = int((gx(ii)-gxmin)/dx_cell) + 1
+      iy = int((gy(ii)-gymin)/dy_cell) + 1
+      iz = int((gz(ii)-gzmin)/dz_cell) + 1
+      if(ix.lt.1) ix=1
+      if(ix.gt.10) ix=10
+      if(iy.lt.1) iy=1
+      if(iy.gt.10) iy=10
+      if(iz.lt.1) iz=1
+      if(iz.gt.10) iz=10
 
       if(abs(ifl).eq.3) then
          xm_out = ms_c(ix,iy,iz)
@@ -7782,7 +7877,13 @@ c --- END CQMF MODIFICATION ---
          v_out  = vu_c(ix,iy,iz)
       endif
 
+c     Fallback: if grid cell has zero mass (not yet populated), use table value
+      if (xm_out .lt. 1d-6) then
+         call qmc_mass_vpot_from_ityp(ifl, xm_out, v_out)
+      endif
+
       if(ifl.lt.0) v_out = -v_out
 
       return
       end
+

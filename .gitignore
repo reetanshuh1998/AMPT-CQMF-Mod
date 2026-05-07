@@ -17,3 +17,16 @@
 *.snm
 *.toc
 __pycache__/
+
+# Large ROOT data files (too big for git — keep locally)
+**/*.root
+
+# Temporary run/scratch directories
+**/quick_ld/
+**/robust_ld_run/
+**/robust_overnight_run/
+**/robust_quick_run/
+**/scratch_test/
+**/test.txt
+**/update.b64
+
