@@ -7073,6 +7073,7 @@ c
       implicit double precision (a-h, o-z)
       common /qmcpar/ xmu_q, xmd_q, xms_q, iqmc
       common /qmcvpot/ qv_u, qv_d, qv_s
+      common /qmcsmooth/ h_smooth
       common /para2/ xmp, xmu, alpha, rscut2, cutof2
       character*200 line
       double precision den_arr(200), mu_arr(200), md_arr(200)
@@ -7090,6 +7091,10 @@ c     Zero-initialize vector potentials (safe fallback for iqmc=0)
       open(88, file='input.density', status='old', err=900)
       read(88,*) target_rho
       read(88,*) iqmc
+      read(88,*,end=881,err=881) h_smooth
+      goto 882
+ 881  h_smooth = 1.0d0
+ 882  continue
       close(88)
 
       if (iqmc .ge. 1) then
@@ -7363,6 +7368,7 @@ c-------------------------------------------------------------
       save /qmcgrid/
       common /qmcbox/ gxmin,gxmax,gymin,gymax,gzmin,gzmax
       save /qmcbox/
+      common /qmcsmooth/ h_smooth
       
       double precision tmp(10,10,10)
       integer ix,iy,iz,jx,jy,jz,dx,dy,dz
@@ -7379,7 +7385,7 @@ c-------------------------------------------------------------
       if (dz_cell .lt. 1d-10) dz_cell=1d-10
 
       ! Gaussian smoothing length
-      h = 2.0d0
+      h = h_smooth
 
       do iz=1,10
       do iy=1,10
@@ -7829,7 +7835,11 @@ c --- END CQMF MODIFICATION ---
       implicit double precision (a-h,o-z)
       common /qmcpar/ xmu_q, xmd_q, xms_q, iqmc
       common /qmcupd/ dt_med, t_last_med
+      common /para3/ nsevt, nevnt, nsbrun, ievt, isbrun
+      integer last_ievt
+      data last_ievt /0/
       save /qmcupd/
+      save last_ievt
       save
 
       if (iqmc .ne. 2) return
@@ -7838,10 +7848,128 @@ c --- END CQMF MODIFICATION ---
       call build_rhob_grid(tcur)
       call smooth_rhob()
       call update_cell_fields()
+
+      if (ievt .ne. last_ievt) then
+         call qmc_diagnostic_dump(tcur)
+         last_ievt = ievt
+      endif
       t_last_med = tcur
 
       return
       end
+
+c=============================================================
+      subroutine qmc_diagnostic_dump(tcur)
+      implicit double precision (a-h,o-z)
+      parameter (MAXPTN=400001)
+      common /para1/ mul
+      common /prec2/gx(MAXPTN),gy(MAXPTN),gz(MAXPTN),ft(MAXPTN),
+     &     px(MAXPTN),py(MAXPTN),pz(MAXPTN),e(MAXPTN),
+     &     xmass(MAXPTN),ityp(MAXPTN)
+      common /para3/ nsevt, nevnt, nsbrun, ievt, isbrun
+      common /qmcgrid/ rhob(10,10,10),
+     &     mu_c(10,10,10),md_c(10,10,10),ms_c(10,10,10),
+     &     vu_c(10,10,10),vd_c(10,10,10),vs_c(10,10,10)
+      common /qmcbox/ gxmin,gxmax,gymin,gymax,gzmin,gzmax
+      common /qmcsmooth/ h_smooth
+      
+      double precision sum_x, sum_y, sum_r2, sum_c2, sum_s2, sum_b
+      double precision x_c, y_c, r2, c2, s2, ecc2, dx, dy, dz
+      integer i, ix, iy, iz
+      logical first_event
+      data first_event /.true./
+      save first_event
+      save
+
+      ! Compute Participant-Plane Eccentricity
+      sum_x = 0d0
+      sum_y = 0d0
+      sum_b = 0d0
+      
+      ! 1. Find center of mass
+      do i=1,mul
+         if (abs(ityp(i)) .ge. 1 .and. abs(ityp(i)) .le. 3) then
+            sum_x = sum_x + gx(i)
+            sum_y = sum_y + gy(i)
+            sum_b = sum_b + 1d0
+         endif
+      enddo
+      
+      if (sum_b .gt. 0d0) then
+         x_c = sum_x / sum_b
+         y_c = sum_y / sum_b
+      else
+         x_c = 0d0
+         y_c = 0d0
+      endif
+      
+      ! 2. Compute Cartesian moments relative to center
+      sum_r2 = 0d0
+      sum_c2 = 0d0
+      sum_s2 = 0d0
+      
+      do i=1,mul
+         if (abs(ityp(i)) .ge. 1 .and. abs(ityp(i)) .le. 3) then
+            dx = gx(i) - x_c
+            dy = gy(i) - y_c
+            r2 = dx**2 + dy**2
+            c2 = dx**2 - dy**2
+            s2 = 2d0 * dx * dy
+            sum_r2 = sum_r2 + r2
+            sum_c2 = sum_c2 + c2
+            sum_s2 = sum_s2 + s2
+         endif
+      enddo
+      
+      if (sum_r2 .gt. 0d0) then
+         ecc2 = dsqrt(sum_c2**2 + sum_s2**2) / sum_r2
+      else
+         ecc2 = 0d0
+      endif
+      
+      ! Write to eccentricity.dat
+      open(92, file='ana/eccentricity.dat', access='append',
+     &     status='unknown')
+      write(92,*) ievt, ecc2, sum_b
+      close(92)
+      
+      ! Write density profile for the first event only
+      if (first_event) then
+         open(93, file='ana/density_profile.dat', status='unknown')
+         write(93,*) '# h = ', h_smooth
+         write(93,*) '# dx = ', (gxmax-gxmin)/10d0
+         write(93,*) '# nx ny = 10 10'
+         write(93,*) '# total_partons = ', sum_b
+         write(93,*) '# ievt = ', ievt
+         
+         ! Sum total baryon density in the grid to check conservation
+         dx = (gxmax-gxmin)/10d0
+         dy = (gymax-gymin)/10d0
+         dz = (gzmax-gzmin)/10d0
+         sum_b = 0d0
+         do iz=1,10
+         do iy=1,10
+         do ix=1,10
+            sum_b = sum_b + rhob(ix,iy,iz) * dx * dy * dz
+         enddo
+         enddo
+         enddo
+         write(93,*) '# integrated_grid_baryon = ', sum_b
+         
+         ! Mid-rapidity slice (iz=5)
+         do ix=1,10
+         do iy=1,10
+            write(93,*) ix, iy, rhob(ix,iy,5)
+         enddo
+         write(93,*) ' '
+         enddo
+         
+         close(93)
+         first_event = .false.
+      endif
+      
+      return
+      end      
 
 c=============================================================
 c --- CQMF MODIFICATION [get_local_mass_vpot] ---

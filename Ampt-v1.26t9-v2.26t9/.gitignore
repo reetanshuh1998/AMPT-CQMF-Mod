@@ -12,3 +12,10 @@ run_default/
 run_modified/
 run_density2/
 run_density3/
+
+*.root
+*.tar.gz
+testing/
+kekcc_*/
+*.crdownload
+*.res

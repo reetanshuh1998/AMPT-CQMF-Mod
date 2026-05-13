@@ -7361,62 +7361,32 @@ c-------------------------------------------------------------
      &     mu_c(10,10,10),md_c(10,10,10),ms_c(10,10,10),
      &     vu_c(10,10,10),vd_c(10,10,10),vs_c(10,10,10)
       save /qmcgrid/
-      common /qmcbox/ gxmin,gxmax,gymin,gymax,gzmin,gzmax
-      save /qmcbox/
-      
       double precision tmp(10,10,10)
-      integer ix,iy,iz,jx,jy,jz,dx,dy,dz
-      double precision h, dx_cell, dy_cell, dz_cell, d2, w
-      double precision sum_rho, sum_w
+      integer ix,iy,iz,jx,jy,jz,dx,dy,dz,n
       save
-
-      ! Get cell dimensions
-      dx_cell = (gxmax-gxmin)/10d0
-      dy_cell = (gymax-gymin)/10d0
-      dz_cell = (gzmax-gzmin)/10d0
-      if (dx_cell .lt. 1d-10) dx_cell=1d-10
-      if (dy_cell .lt. 1d-10) dy_cell=1d-10
-      if (dz_cell .lt. 1d-10) dz_cell=1d-10
-
-      ! Gaussian smoothing length
-      h = 2.0d0
 
       do iz=1,10
       do iy=1,10
       do ix=1,10
-         sum_rho = 0d0
-         sum_w = 0d0
-         
-         ! 5x5x5 neighborhood
-         do dz=-2,2
-         do dy=-2,2
-         do dx=-2,2
+         sum1=0d0
+         n=0
+         do dz=-1,1
+         do dy=-1,1
+         do dx=-1,1
             jx=ix+dx
             jy=iy+dy
             jz=iz+dz
-            
-            ! Enforce grid boundaries
             if(jx.ge.1.and.jx.le.10.and.
      &         jy.ge.1.and.jy.le.10.and.
      &         jz.ge.1.and.jz.le.10) then
-               
-               ! Physical distance squared
-               d2 = (dble(dx)*dx_cell)**2 + (dble(dy)*dy_cell)**2 +
-     &              (dble(dz)*dz_cell)**2
-               
-               ! Gaussian weight
-               w = exp(-d2 / (2d0 * h**2))
-               
-               sum_rho = sum_rho + rhob(jx,jy,jz) * w
-               sum_w = sum_w + w
+               sum1 = sum1 + rhob(jx,jy,jz)
+               n = n + 1
             endif
          enddo
          enddo
          enddo
-         
-         ! Normalize to conserve density
-         if(sum_w .gt. 0d0) then
-            tmp(ix,iy,iz) = sum_rho / sum_w
+         if(n.gt.0) then
+            tmp(ix,iy,iz) = sum1/dble(n)
          else
             tmp(ix,iy,iz) = 0d0
          endif
@@ -7424,7 +7394,6 @@ c-------------------------------------------------------------
       enddo
       enddo
 
-      ! Write back to global array
       do iz=1,10
       do iy=1,10
       do ix=1,10

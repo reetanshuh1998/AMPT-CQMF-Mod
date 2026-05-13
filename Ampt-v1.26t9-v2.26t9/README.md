@@ -129,3 +129,7 @@ Density-dependent responses in Directed Flow $v_1$ (capturing phase softening lo
 ### 6. Species-Resolved Production
 $p_T$ spectra and rapidity distributions for all six key hadron species, demonstrating selective medium effects on baryons and kaons while pions remain stable.
 ![Particle Production](proton_kaon_production.png)
+
+### 7. Grid Resolution Effects on Mean-Field Flow
+A fundamental test of the Particle-in-Cell (PIC) mean-field approximation. Increasing the spatial grid resolution from $10^3$ to $20^3$ cells causes the number of partons per cell to drop to $\mathcal{O}(1)$. This introduces dominant stochastic noise into the density field, producing random, localized potential gradients that wash out the collective expansion and suppress $v_2$. This explicitly demonstrates that a coarser $10^3$ grid is physically required to maintain the macroscopic thermodynamics necessary for mean-field dynamics in small collision systems at BES energies.
+![Grid Resolution Effect](publication_plots/grid_resolution_v2_comparison.png)
